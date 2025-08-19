@@ -43,6 +43,7 @@
 		<e k="ags_torch" v="Einfache Taschenlampensteuerung"/>
 		<e k="ags_walkMode" v="Gehmodus"/>
 		<e k="ags_crouchMode" v="Hockmodus"/>
+		<e k="ags_runMode" v="Schnelleres Laufen"/>
 		<e k="ags_toolTip_hud" v="Sichtbarkeit des Spielinterface"/>
 		<e k="ags_toolTip_crosshair" v="Sichtbarkeit des Fadenkreuzes."/>
 		<e k="ags_toolTip_date" v="Das aktuelle Datum in der ausgewählten Ecke des Bildschirms."/>
@@ -67,6 +68,11 @@
 		<e k="ags_toolTip_torch" v="Die Taschenlampe kann mit der gleichen Taste ausgeschaltet werden, mit der sie auch eingeschaltet wird."/>
 		<e k="ags_toolTip_walkMode" v="Die Art und Weise, zwischen Geh- und Laufmodus zu wechseln."/>
 		<e k="ags_toolTip_crouchMode" v="Hockmodus umschalten."/>
+		<e k="ags_toolTip_runMode" v="Schneller laufen durch doppeltes Drücken der Taste."/>
 		<e k="ags_button_quitMenu" v="Zurück zum Menü"/>
+		<e k="ags_toolTip_hudDisabled" v="Diese Einstellung erfordert die Aktivierung der HUDs."/>
+		<e k="ags_toolTip_easyMotorStartDisabled" v="Diese Einstellung erfordert die Aktivierung des manuellen Motorstarts."/>
+		<e k="ags_toolTip_runModeDisabled" v="Diese Einstellung erfordert das Aktivieren des schnelleren Laufens durch Drücken der Taste."/>
+		<e k="ags_toolTip_clockDisabled" v="Diese Einstellung erfordert das Aktivieren der Uhr mit dem aktuellen Datum."/>
 	</elements>
 </l10n>

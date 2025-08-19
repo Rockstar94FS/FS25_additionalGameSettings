@@ -43,6 +43,7 @@
 		<e k="ags_torch" v="Simple flashlight control"/>
 		<e k="ags_walkMode" v="Walk mode"/>
 		<e k="ags_crouchMode" v="Crouch mode"/>
+		<e k="ags_runMode" v="Faster running"/>
 		<e k="ags_toolTip_hud" v="Interface visibility."/>
 		<e k="ags_toolTip_crosshair" v="Crosshair visibility."/>
 		<e k="ags_toolTip_date" v="Display of the current date."/>
@@ -67,6 +68,11 @@
 		<e k="ags_toolTip_torch" v="The flashlight can be turned off with the same button used to turn it on."/>
 		<e k="ags_toolTip_walkMode" v="Toggle walk mode."/>
 		<e k="ags_toolTip_crouchMode" v="Toggle crouch mode."/>
+		<e k="ags_toolTip_runMode" v="Run faster by double-pressing the key."/>
 		<e k="ags_button_quitMenu" v="Quit to menu"/>
+		<e k="ags_toolTip_hudDisabled" v="This setting requires enabling the HUDs."/>
+		<e k="ags_toolTip_easyMotorStartDisabled" v="This setting requires enabling manual engine start."/>
+		<e k="ags_toolTip_runModeDisabled" v="This setting requires enabling faster running by pressing the key."/>
+		<e k="ags_toolTip_clockDisabled" v="This setting requires enabling the clock with the current date."/>
 	</elements>
 </l10n>

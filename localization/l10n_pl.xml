@@ -55,6 +55,7 @@
 		<e k="ags_torch" v="Prosta obsługa latarki"/>
 		<e k="ags_walkMode" v="Tryb biegania"/>
 		<e k="ags_crouchMode" v="Tryb kucania"/>
+		<e k="ags_runMode" v="Szybsze bieganie"/>
 		<e k="ags_toolTip_hud" v="Widoczność interfejsu."/>
 		<e k="ags_toolTip_crosshair" v="Widoczność celownika."/>
 		<e k="ags_toolTip_date" v="Wyświetlanie aktualnej daty."/>
@@ -79,6 +80,11 @@
 		<e k="ags_toolTip_torch" v="Latarkę można wyłączyć tym samym przyciskiem, którym ją włączono."/>
 		<e k="ags_toolTip_walkMode" v="Przełączanie trybu biegania."/>
 		<e k="ags_toolTip_crouchMode" v="Przełączanie trybu kucania."/>
+		<e k="ags_toolTip_runMode" v="Szybsze bieganie po dwukrotnym wciśnięciu klawisza."/>
 		<e k="ags_button_quitMenu" v="Wyjdź do menu"/>
+		<e k="ags_toolTip_hudDisabled" v="To ustawienie wymaga włączenia HUD-ów."/>
+		<e k="ags_toolTip_easyMotorStartDisabled" v="To ustawienie wymaga włącznia manualnego rozruchu silnika."/>
+		<e k="ags_toolTip_runModeDisabled" v="To ustawienie wymaga włączenia szybszego biegania poprzez naciśnięcie klawisza."/>
+		<e k="ags_toolTip_clockDisabled" v="To ustawienie wymaga włączenia zegara z aktualną datą."/>
 	</elements>
 </l10n>

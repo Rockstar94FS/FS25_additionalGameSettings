@@ -121,9 +121,9 @@ function AdditionalSettingsGui:save_onButtonGameSettings(saveFrame, superFunc)
 
 	superFunc(saveFrame)
 
-	if state ~= InGameMenuSettingsFrame.SUB_CATEGORY.CONTROLS then
+	-- if state ~= InGameMenuSettingsFrame.SUB_CATEGORY.CONTROLS then
 		subCategoryPaging:setState(state, true)
-	end
+	-- end
 end
 
 function AdditionalSettingsGui:settings_onClickCallback(settingsFrame, superFunc, state)

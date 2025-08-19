@@ -95,6 +95,7 @@ function AdditionalSettingsManager:loadAdditionalSettings()
 		torch = TorchSetting.new(),
 		walkMode = WalkModeSetting.new(),
 		crouchMode = CrouchModeSettings.new(),
+		runMode = RunModeSettings.new(),
 		debug = DebugSettings.new()
 	}
 end
@@ -104,6 +105,24 @@ function AdditionalSettingsManager:addModEnvironmentTexts()
 		if string.startsWith(name, "global_") then
 			gEnv.g_i18n:setText(name:sub(8), value)
 		end
+	end
+
+	if g_languageShort == "pl" and g_i18n:getText("ui_inGameMenuDevices") == "Urządzeń" then
+		local replacedText = "Urządzenia"
+
+		for _, subCategoryTab in pairs(g_inGameMenu.pageSettings.subCategoryTabs) do
+			if subCategoryTab.text == utf8ToUpper(g_i18n:getText("ui_inGameMenuDevices")) then
+				subCategoryTab:setText(replacedText)
+
+				if subCategoryTab.elements[1] ~= nil then
+					subCategoryTab.elements[1]:setSize(subCategoryTab.size[1])
+				end
+
+				break
+			end
+		end
+
+		gEnv.g_i18n:setText("ui_inGameMenuDevices", replacedText)
 	end
 end
 
@@ -229,7 +248,7 @@ end
 
 function AdditionalSettingsManager:loadSettingsFromXMLFile()
 	local settingStates = {}
-	local xmlFile = XMLFile.loadIfExists("additionalSettingsXML", self.modSettings.xmlFilename, "settings")
+	local xmlFile = XMLFile.loadIfExists("additionalSettingsXML", self.modSettings.xmlFilename)
 
 	if xmlFile ~= nil then
 		if self.resetAllowed and self.modVersion ~= xmlFile:getString("settings#version") then

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<modDesc descVersion="97">
+<modDesc descVersion="100">
 	<author>Rockstar</author>
 
-	<version>1.0.0.4</version>
+	<version>1.0.0.5</version>
 
 	<title>
 		<en>Additional Game Settings</en>
@@ -49,7 +49,12 @@ Changelog 1.0.0.3:
 - Fixed the error ".../AdditionalSettings.lua:1363: attempt to index nil with 'delete'".
 
 Changelog 1.0.0.4:
-- Fixed the function "Easier engine starting", which was not working after patch 1.7.0.0.]]></en>
+- Fixed the function "Easier engine starting", which was not working after patch 1.7.0.0,
+- Fixed an issue where the month name was displayed incorrectly on the clock (November instead of October),
+- Added an option to run faster by double-pressing a key.
+
+Changelog 1.0.0.5:
+- Added tooltips for disabled interface options.]]></en>
 		<de>
 			<![CDATA[Diese Mod fügt dem Pausenmenü einen neuen Einstellungstab hinzu.
 
@@ -86,7 +91,12 @@ Changelog 1.0.0.3:
 - Fehler ".../AdditionalSettings.lua:1363: attempt to index nil with 'delete'" wurde behoben.
 
 Changelog 1.0.0.4:
-- Die Funktion "Einfacherer Motorstart", die nach Patch 1.7.0.0 nicht funktionierte, wurde behoben.]]></de>
+- Die Funktion "Einfacherer Motorstart", die nach Patch 1.7.0.0 nicht funktionierte, wurde behoben,
+- Ein Problem wurde behoben, bei dem der Monatsname auf der Uhr falsch angezeigt wurde (November statt Oktober),
+- Eine Option zum schnelleren Laufen durch doppeltes Drücken einer Taste wurde hinzugefügt.
+
+Changelog 1.0.0.5:
+- Hinweise für deaktivierte Schnittstellenoptionen hinzugefügt.]]></de>
 		<fr>
 			<![CDATA[Ce mod ajoute un nouvel onglet de paramètres au menu pause.
 
@@ -123,7 +133,12 @@ Changelog 1.0.0.3:
 - Correction de l'erreur ".../AdditionalSettings.lua:1363: attempt to index nil with 'delete'".
 
 Changelog 1.0.0.4:
-- Correction de la fonction "Démarrage moteur simplifié" qui ne fonctionnait plus après le patch 1.7.0.0.]]></fr>
+- Correction de la fonction "Démarrage moteur simplifié" qui ne fonctionnait plus après le patch 1.7.0.0,
+- Correction d’un problème où le nom du mois s’affichait incorrectement sur l’horloge (novembre au lieu d’octobre),
+- Une option pour courir plus vite en appuyant deux fois sur une touche a été ajoutée.
+
+Changelog 1.0.0.5:
+- Ajout d’info-bulles pour les options d’interface désactivées.]]></fr>
 		<pl>
 			<![CDATA[Ten mod dodaje zakładkę z nowymi ustawieniami do menu pauzy.
 
@@ -160,7 +175,12 @@ Changelog 1.0.0.3:
 - Naprawiono błąd ".../AdditionalSettings.lua:1363: attempt to index nil with 'delete'".
 
 Changelog 1.0.0.4:
-- Naprawiono funkcję "Uproszczone uruchamianie silnika", która nie działała po patchu 1.7.0.0.]]></pl>
+- Naprawiono funkcję "Uproszczone uruchamianie silnika", która nie działała po patchu 1.7.0.0,
+- Naprawiono problem z niepoprawnym wyświetlaniem nazwy miesiąca (listopad zamiast październik ) na zegarze,
+- Dodano opcję szybszego biegania po podwójnym naciśnięciu klawisza.
+
+Changelog 1.0.0.5:
+- Dodano podpowiedzi dla wyłączonych opcji interfejsu.]]></pl>
 		<ru>
 			<![CDATA[Этот мод добавляет новую вкладку настроек в меню паузы.
 
@@ -197,7 +217,12 @@ Changelog 1.0.0.3:
 - Исправлена ошибка ".../AdditionalSettings.lua:1363: attempt to index nil with 'delete'".
 
 Changelog 1.0.0.4:
-- Исправлена функция "Упрощённый запуск двигателя", не работавшая после патча 1.7.0.0.]]></ru>
+- Исправлена функция "Упрощённый запуск двигателя", не работавшая после патча 1.7.0.0,
+- Исправлена ошибка, из-за которой на часах некорректно отображалось название месяца (ноябрь вместо октября),
+- Добавлена опция быстрого бега при двойном нажатии клавиши.
+
+Changelog 1.0.0.5:
+- Добавлены подсказки для отключённых параметров интерфейса.]]></ru>
 	</description>
 
 	<iconFilename>icon_additionalGameSettings.png</iconFilename>

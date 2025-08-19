@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <l10n>
 	<elements>
-		<e k="global_ags_ui_ingameMenuAdditionalSettings" v="Додаткові налаштування"/> 
+		<e k="global_ags_ui_ingameMenuAdditionalSettings" v="Додаткові налаштування"/>
 		<e k="ags_ui_currentTimeHour" v="Година"/>
 		<e k="ags_ui_currentTimeDate" v="Дата"/>
 		<e k="ags_ui_currentTimeDateShort" v="Короткий"/>
@@ -56,7 +56,7 @@
 		<e k="ags_toolTip_easyMotorStart" v="Запуск двигуна після натискання клавіші газу"/>
 		<e k="ags_toolTip_autostart" v="Автоматичний запуск гри після завершення завантаження"/>
 		<e k="ags_toolTip_storeItems" v="Фільтрувати об'єкти, що відображаються в меню магазину"/>
-		<e k="ags_toolTip_lighting" v="Індивідуальні налаштування освітлення. Ви можете додати власне освітлення, створивши теку з налаштуваннями в (%s)"/>		
+		<e k="ags_toolTip_lighting" v="Індивідуальні налаштування освітлення. Ви можете додати власне освітлення, створивши теку з налаштуваннями в (%s)"/>
 		<e k="ags_toolTip_dof" v="Глибина різкості"/>
 		<e k="ags_toolTip_guiCamera" v="Переміщення камери за допомогою миші у режимі розміщення об'єктів"/>
 		<e k="ags_toolTip_clockBackground" v="Фон годинника з поточною датою"/>
@@ -70,5 +70,9 @@
 		<e k="ags_toolTip_crouchMode" v="Переключення режиму присідання"/>
 		<e k="ags_toolTip_runMode" v="Бігти швидше подвійним натисканням клавіші"/>
 		<e k="ags_button_quitMenu" v="Вийти в меню"/>
+		<!-- <e k="ags_toolTip_hudDisabled" v="TODO"/> -->
+		<!-- <e k="ags_toolTip_easyMotorStartDisabled" v="TODO"/> -->
+		<!-- <e k="ags_toolTip_runModeDisabled" v="TODO"/> -->
+		<!-- <e k="ags_toolTip_clockDisabled" v="TODO"/> -->
 	</elements>
 </l10n>

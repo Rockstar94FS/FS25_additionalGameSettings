@@ -43,6 +43,7 @@
 		<e k="ags_torch" v="Упрощенное управление фонариком"/>
 		<e k="ags_walkMode" v="Режим ходьбы"/>
 		<e k="ags_crouchMode" v="Режим приседания"/>
+		<e k="ags_runMode" v="Быстрый бег"/>
 		<e k="ags_toolTip_hud" v="Видимость интерфейса."/>
 		<e k="ags_toolTip_crosshair" v="Видимость прицела."/>
 		<e k="ags_toolTip_date" v="Текущая дата отображается в выбранном углу экрана."/>
@@ -67,6 +68,11 @@
 		<e k="ags_toolTip_torch" v="Фонарик можно выключить той же кнопкой, что и включить."/>
 		<e k="ags_toolTip_walkMode" v="Способ переключения между режимами ходьбы и бега."/>
 		<e k="ags_toolTip_crouchMode" v="Переключение режима приседания."/>
+		<e k="ags_toolTip_runMode" v="Бег быстрее при двойном нажатии клавиши."/>
 		<e k="ags_button_quitMenu" v="Выйти в меню"/>
+		<e k="ags_toolTip_hudDisabled" v="Этот параметр требует включения HUD."/>
+		<e k="ags_toolTip_easyMotorStartDisabled" v="Этот параметр требует включения ручного запуска двигателя."/>
+		<e k="ags_toolTip_runModeDisabled" v="Этот параметр требует включения быстрого бега путем нажатия клавиши."/>
+		<e k="ags_toolTip_clockDisabled" v="Этот параметр требует включения часов с текущей датой."/>
 	</elements>
 </l10n>

@@ -57,7 +57,8 @@ function AdditionalSettingsPage:initialize(settingsManager)
 	self.optionMapping[self.mulitFramerateLimiter] = addittionalSettings.framerateLimiter
 	self.optionMapping[self.multiWalkMode] = addittionalSettings.walkMode
 	self.optionMapping[self.multiCrouchMode] = addittionalSettings.crouchMode
-	
+	self.optionMapping[self.multiRunMode] = addittionalSettings.runMode
+
 	self.buttonMapping[self.buttonDateColor] = addittionalSettings.clockColor
 	self.buttonMapping[self.buttonHudColor] = addittionalSettings.hudColor
 
@@ -76,15 +77,32 @@ function AdditionalSettingsPage:initialize(settingsManager)
 	self.settingsManager = settingsManager
 end
 
-function AdditionalSettingsPage:updateAlternating()
-	local alternating = true
+function AdditionalSettingsPage:onGuiSetupFinished()
+	AdditionalSettingsPage:superClass().onGuiSetupFinished(self)
 
-	for _, element in pairs(self.additionalSettingsLayout.elements) do
-		if element.name == "sectionHeader" then
-			alternating = true
-		elseif element:getIsVisibleNonRec() then
-			element:setImageColor(nil, unpack(InGameMenuSettingsFrame.COLOR_ALTERNATING[alternating]))
-			alternating = not alternating
+	local oldDisableFunc = self.checkHUD.setDisabled
+
+	local function elementDisableFunc(element, disabled)
+		oldDisableFunc(element, disabled)
+		element.parent:getDescendantByName("iconDisabled"):setDisabled(not disabled)
+	end
+
+	for _, container in pairs(self.additionalSettingsLayout.elements) do
+		if container:getDescendantByName("iconDisabled") ~= nil then
+			container.elements[1].setDisabled = elementDisableFunc
+		end
+	end
+end
+
+function AdditionalSettingsPage:updateAlternating()
+	local isAlternate = true
+
+	for _, container in pairs(self.additionalSettingsLayout.elements) do
+		if container.name == "sectionHeader" then
+			isAlternate = true
+		elseif container:getIsVisibleNonRec() then
+			container:setImageColor(nil, unpack(InGameMenuSettingsFrame.COLOR_ALTERNATING[isAlternate]))
+			isAlternate = not isAlternate
 		end
 	end
 
@@ -161,4 +179,11 @@ end
 
 function AdditionalSettingsPage:onClickAdditionalSettings()
 	g_inGameMenu.pageSettings.subCategoryPaging:setState(InGameMenuSettingsFrame.SUB_CATEGORY.ADDITIONAL_SETTINGS, true)
+end
+
+function AdditionalSettingsPage:onClickLockedIcon()
+end
+
+function AdditionalSettingsPage:onFocusLockedIcon(icon)
+	self.additionalSettingsLayout:scrollToMakeElementVisible(icon)
 end

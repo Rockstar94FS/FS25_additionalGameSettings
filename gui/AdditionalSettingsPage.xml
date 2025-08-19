@@ -24,12 +24,18 @@
 						<Text profile="fs25_colorButtonTooltip" name="ignore" text="$l10n_ags_toolTip_hudColor"/>
 						<ThreePartBitmap profile="fs25_settingsColorButtonPicked"/>
 					</Button>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_hudDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_hudColor"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
 					<MultiTextOption profile="fs25_settingsMultiTextOption" onClick="onClickMultiOption" id="multiCrosshair" texts="$l10n_ui_on|$l10n_ags_ui_crosshairPartial|$l10n_ui_off">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_crosshair"/>
 					</MultiTextOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_hudDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_crosshair"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
@@ -97,6 +103,9 @@
 					<BinaryOption profile="fs25_settingsBinaryOption" onClick="onClickCheckbox" id="checkEasyMotorStart">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_easyMotorStart"/>
 					</BinaryOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_easyMotorStartDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_easyMotorStart"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
@@ -124,6 +133,15 @@
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_walkMode"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
+					<MultiTextOption profile="fs25_settingsMultiTextOption" onClick="onClickMultiOption" id="multiRunMode">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_runMode"/>
+					</MultiTextOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_runModeDisabled" position="940px 0px"/>
+					</Button>
+					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_runMode"/>
+				</Bitmap>
+				<Bitmap profile="fs25_multiTextOptionContainer">
 					<MultiTextOption profile="fs25_settingsMultiTextOption" onClick="onClickMultiOption" id="multiCrouchMode" texts="$l10n_ags_ui_hold|$l10n_ags_ui_press">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_crouchMode"/>
 					</MultiTextOption>
@@ -134,6 +152,9 @@
 					<MultiTextOption profile="fs25_settingsMultiTextOption" onClick="onClickMultiOption" id="multiDate">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_date"/>
 					</MultiTextOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_hudDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_date"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
@@ -146,30 +167,45 @@
 						<Text profile="fs25_colorButtonTooltip" name="ignore" text="$l10n_ags_toolTip_dateColor"/>
 						<ThreePartBitmap profile="fs25_settingsColorButtonPicked"/>
 					</Button>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_clockDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_dateColor"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
 					<MultiTextOption profile="fs25_settingsMultiTextOption" onClick="onClickMultiOption" id="multiClockPosition" texts="$l10n_ags_ui_clockPositionTopRight|$l10n_ags_ui_clockPositionBottomRight|$l10n_ags_ui_clockPositionTopLeft|$l10n_ags_ui_clockPositionBottomLeft|$l10n_ags_ui_clockPositionTop|$l10n_ags_ui_clockPositionBottom">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_clockPosition"/>
 					</MultiTextOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_clockDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_clockPosition"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
 					<BinaryOption profile="fs25_settingsBinaryOption" onClick="onClickCheckbox" id="checkClockBackground">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_clockBackground"/>
 					</BinaryOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_clockDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_clockBackground"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
 					<BinaryOption profile="fs25_settingsBinaryOption" onClick="onClickCheckbox" id="checkClockBold">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_clockBold"/>
 					</BinaryOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_clockDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_clockBold"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
 					<BinaryOption profile="fs25_settingsBinaryOption" onClick="onClickCheckbox" id="checkHourFormat">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_hourFormat"/>
 					</BinaryOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_hudDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_hourFormat"/>
 				</Bitmap>
 			</ScrollingLayout>

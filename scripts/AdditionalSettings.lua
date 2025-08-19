@@ -181,7 +181,7 @@ function DateSetting.new(custom_mt)
 		["July"] = getDateText("ui_month7"),
 		["August"] = getDateText("ui_month8"),
 		["September"] = getDateText("ui_month9"),
-		["October"] = getDateText("ui_month11"),
+		["October"] = getDateText("ui_month10"),
 		["November"] = getDateText("ui_month11"),
 		["December"] = getDateText("ui_month12")
 	}
@@ -2264,7 +2264,12 @@ function WalkModeSetting.new(custom_mt)
 
 	self.runModeEnabled = false
 	self.runModeBlocked = false
+	self.runModeState = 0
+
 	self.inputRunClick = false
+
+	self.lastClickTime = nil
+	self.doubleClickInterval = 400
 
 	return self
 end
@@ -2278,12 +2283,22 @@ function WalkModeSetting:update(playerInputComponent, dt)
 		elseif self.runModeEnabled or self.force then
 			self.runModeEnabled = false
 			self.runModeBlocked = false
+			self.runModeState = 0
 		end
 
-		playerInputComponent.runAxis = self.runModeEnabled and not self.runModeBlocked and 1 or 0
+		local runningSpeed = 1
+
+		if self.runModeState == 2 then
+			local runModeSetting = g_additionalSettingsManager:getSettingByName("runMode")
+
+			runningSpeed = runModeSetting:getRunningSpeed()
+		end
+
+		playerInputComponent.runAxis = self.runModeEnabled and not self.runModeBlocked and runningSpeed or 0
 	else
 		self.runModeEnabled = false
 		self.runModeBlocked = false
+		self.runModeState = 0
 	end
 end
 
@@ -2292,8 +2307,28 @@ function WalkModeSetting:onInputRun(playerInputComponent, _, inputValue)
 		local keyPressed = not playerInputComponent.locked and inputValue > 0
 
 		if keyPressed and not self.inputRunClick then
+			self.runModeState = self.runModeState + 1
+
+			local numStages = 2
+
+			if g_additionalSettingsManager:getSettingStateByName("runMode") > 0 then
+				if self.lastClickTime == nil or self.lastClickTime <= g_time - self.doubleClickInterval then
+					self.lastClickTime = g_time
+				else
+					if self.runModeState == 2 then
+						numStages = 3
+					end
+
+					self.lastClickTime = nil
+				end
+			end
+
+			if self.runModeState >= numStages then
+				self.runModeState = 0
+			end
+
 			if self.runModeEnabled then
-				self.runModeBlocked = not self.runModeBlocked
+				self.runModeBlocked = self.runModeState == 0
 			end
 
 			self.inputRunClick = true
@@ -2302,6 +2337,14 @@ function WalkModeSetting:onInputRun(playerInputComponent, _, inputValue)
 		end
 	else
 		self.inputRunClick = false
+	end
+end
+
+function WalkModeSetting:onStateChange(state, optionElement, loadFromSavegame)
+	if optionElement ~= nil then
+		local target = optionElement.target
+
+		target.multiRunMode:setDisabled(state == 0)
 	end
 end
 
@@ -2351,6 +2394,46 @@ function CrouchModeSettings:onInputCrouch(playerInputComponent, _, inputValue)
 end
 
 
+RunModeSettings = {}
+
+local RunModeSettings_mt = Class(RunModeSettings)
+
+function RunModeSettings.new(custom_mt)
+	local self = setmetatable({}, custom_mt or RunModeSettings_mt)
+
+	self.state = 0
+	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+
+	self.modes = {1.5, 2, 2.5, 3, 3.5, 4}
+
+	return self
+end
+
+function RunModeSettings:onTabOpen(optionElement)
+	optionElement:setDisabled(g_additionalSettingsManager:getSettingStateByName("walkMode") == 0)
+end
+
+function RunModeSettings:onCreateElement(optionElement)
+	local texts = {
+		g_i18n:getText("ui_off")
+	}
+
+	for _, mode in pairs(self.modes) do
+		table.insert(texts, string.format("%.1fX", mode))
+	end
+
+	optionElement:setTexts(texts)
+end
+
+function RunModeSettings:getRunningSpeed()
+	if self.state == 0 then
+		return 1
+	end
+
+	return self.modes[self.state] or 1
+end
+
+
 DebugSettings = {}
 
 local DebugSettings_mt = Class(DebugSettings)
@@ -2363,7 +2446,8 @@ function DebugSettings.new(custom_mt)
 	if gEnv.g_isDevelopmentVersion then
 		AdditionalSettingsUtil.registerEventListener("onLoad", self)
 		AdditionalSettingsUtil.registerEventListener("onDelete", self)
-		AdditionalSettingsUtil.overwrittenFunction(HUD, "drawBaseHUD", self, "drawBaseHUD")
+		AdditionalSettingsUtil.overwrittenFunction(HUD, "drawBaseHUD", self, "overwritttenFunc")
+		AdditionalSettingsUtil.overwrittenFunction(Player, "createConsoleCommands", self, "overwritttenFunc")
 	end
 
 	return self
@@ -2377,25 +2461,27 @@ function DebugSettings:onDelete()
 	removeConsoleCommand("agsPrintTable")
 end
 
-function DebugSettings:drawBaseHUD(hud, superFunc, ...)
+function DebugSettings:overwritttenFunc(target, superFunc, ...)
 	local isDevelopmentVersion = gEnv.g_isDevelopmentVersion
 
 	gEnv.g_isDevelopmentVersion = false
-	superFunc(hud, ...)
+	superFunc(target, ...)
 	gEnv.g_isDevelopmentVersion = isDevelopmentVersion
 end
 
 function DebugSettings:consoleCommandPrintTable(inputTable, depth, maxDepth)
 	if inputTable ~= nil then
+		setFileLogPrefixTimestamp(false)
+
 		depth = depth or 0
 		maxDepth = maxDepth or 0
 
 		print("")
-		print("")
-		print("")
-		print("===================================================")
+		print("==================== START ====================")
 		gEnv.loadstring(string.format("DebugUtil.printTableRecursively(%s, '-', %d ,%d)", inputTable, depth, maxDepth))()
-		print("===================================================")
+		print("==================== END ====================")
+
+		setFileLogPrefixTimestamp(g_logFilePrefixTimestamp)
 	else
 		return "Usage: agsPrintTable <table> <depth> <maxDepth>"
 	end

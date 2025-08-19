@@ -43,6 +43,7 @@
 		<e k="ags_torch" v="Commande simplifiée de la lampe torche"/>
 		<e k="ags_walkMode" v="Mode de marche"/>
 		<e k="ags_crouchMode" v="Mode accroupi"/>
+		<e k="ags_runMode" v="Course plus rapide"/>
 		<e k="ags_toolTip_hud" v="Visibilité de l'interface du jeu."/>
 		<e k="ags_toolTip_crosshair" v="Visibilité du réticule."/>
 		<e k="ags_toolTip_date" v="Affichage de la date actuelle."/>
@@ -67,6 +68,11 @@
 		<e k="ags_toolTip_torch" v="La lampe de poche peut être éteinte avec le même bouton que celui utilisé pour l'allumer."/>
 		<e k="ags_toolTip_walkMode" v="La façon de basculer entre le mode marche et course."/>
 		<e k="ags_toolTip_crouchMode" v="Basculer en mode accroupi."/>
+		<e k="ags_toolTip_runMode" v="Courir plus vite en appuyant deux fois sur la touche."/>
 		<e k="ags_button_quitMenu" v="Quitter au menu"/>
+		<e k="ags_toolTip_hudDisabled" v="Ce paramètre nécessite l’activation des HUDs."/>
+		<e k="ags_toolTip_easyMotorStartDisabled" v="Ce paramètre nécessite l’activation du démarrage manuel du moteur."/>
+		<e k="ags_toolTip_runModeDisabled" v="Ce paramètre nécessite l’activation de la course rapide en appuyant sur la touche."/>
+		<e k="ags_toolTip_clockDisabled" v="Ce paramètre nécessite l’activation de l’horloge avec la date actuelle."/>
 	</elements>
 </l10n>
