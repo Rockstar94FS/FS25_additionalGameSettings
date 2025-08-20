@@ -54,7 +54,8 @@ Changelog 1.0.0.4:
 - Added an option to run faster by double-pressing a key.
 
 Changelog 1.0.0.5:
-- Added tooltips for disabled interface options.]]></en>
+- Added tooltips for disabled interface options,
+- TODO...]]></en>
 		<de>
 			<![CDATA[Diese Mod fügt dem Pausenmenü einen neuen Einstellungstab hinzu.
 
@@ -96,7 +97,8 @@ Changelog 1.0.0.4:
 - Eine Option zum schnelleren Laufen durch doppeltes Drücken einer Taste wurde hinzugefügt.
 
 Changelog 1.0.0.5:
-- Hinweise für deaktivierte Schnittstellenoptionen hinzugefügt.]]></de>
+- Hinweise für deaktivierte Schnittstellenoptionen hinzugefügt,
+- TODO...]]></de>
 		<fr>
 			<![CDATA[Ce mod ajoute un nouvel onglet de paramètres au menu pause.
 
@@ -138,7 +140,8 @@ Changelog 1.0.0.4:
 - Une option pour courir plus vite en appuyant deux fois sur une touche a été ajoutée.
 
 Changelog 1.0.0.5:
-- Ajout d’info-bulles pour les options d’interface désactivées.]]></fr>
+- Ajout d’info-bulles pour les options d’interface désactivées,
+- TODO...]]></fr>
 		<pl>
 			<![CDATA[Ten mod dodaje zakładkę z nowymi ustawieniami do menu pauzy.
 
@@ -180,7 +183,8 @@ Changelog 1.0.0.4:
 - Dodano opcję szybszego biegania po podwójnym naciśnięciu klawisza.
 
 Changelog 1.0.0.5:
-- Dodano podpowiedzi dla wyłączonych opcji interfejsu.]]></pl>
+- Dodano podpowiedzi dla wyłączonych opcji interfejsu,
+- TODO...]]></pl>
 		<ru>
 			<![CDATA[Этот мод добавляет новую вкладку настроек в меню паузы.
 
@@ -222,7 +226,8 @@ Changelog 1.0.0.4:
 - Добавлена опция быстрого бега при двойном нажатии клавиши.
 
 Changelog 1.0.0.5:
-- Добавлены подсказки для отключённых параметров интерфейса.]]></ru>
+- Добавлены подсказки для отключённых параметров интерфейса,
+- TODO...]]></ru>
 	</description>
 
 	<iconFilename>icon_additionalGameSettings.png</iconFilename>
