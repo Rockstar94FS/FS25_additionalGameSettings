@@ -12,10 +12,12 @@ local AdditionalSettingsGui_mt = Class(AdditionalSettingsGui)
 
 function AdditionalSettingsGui.new(custom_mt)
 	local self = setmetatable({}, custom_mt or AdditionalSettingsGui_mt)
+
+	AdditionalSettingsUtil.appendedFunction(InGameMenuSettingsFrame, "onFrameOpen", self, "settings_onFrameOpen")
+	AdditionalSettingsUtil.prependedFunction(InGameMenuSettingsFrame, "onFrameClose", self, "settings_onFrameClose")
+
 	local settingsFrame = g_inGameMenu.pageSettings
 
-	AdditionalSettingsUtil.appendedFunction(settingsFrame, "onFrameOpen", self, "settings_onFrameOpen")
-	AdditionalSettingsUtil.prependedFunction(settingsFrame, "onFrameClose", self, "settings_onFrameClose")
 	AdditionalSettingsUtil.overwrittenFunction(settingsFrame.subCategoryPaging, "onClickCallback", self, "settings_onClickCallback")
 	AdditionalSettingsUtil.overwrittenFunction(settingsFrame, "inputEvent", self, "settings_inputEvent")
 
@@ -93,6 +95,10 @@ function AdditionalSettingsGui:addElementAtPosition(element, target, position)
 end
 
 function AdditionalSettingsGui:settings_onFrameOpen(settingsFrame)
+	if g_inGameMenu.pageSettings ~= settingsFrame then
+		return
+	end
+
 	settingsFrame.isOpening = true
 
 	if self.screenController ~= nil then
@@ -103,6 +109,10 @@ function AdditionalSettingsGui:settings_onFrameOpen(settingsFrame)
 end
 
 function AdditionalSettingsGui:settings_onFrameClose(settingsFrame)
+	if g_inGameMenu.pageSettings ~= settingsFrame then
+		return
+	end
+
 	if self.screenController ~= nil then
 		self.screenController:onFrameClose()
 	end
