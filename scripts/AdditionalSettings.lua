@@ -1930,7 +1930,7 @@ function HudColorSetting.new(custom_mt)
 
 	self.modsOverlays = {}
 
-	local cpEnv = self:getModEnvByModName("FS25_Courseplay")
+	local cpEnv = self:getModEnvByModName("Courseplay")
 
 	if cpEnv ~= nil then
 		if cpEnv.CpHudInfoTexts ~= nil and cpEnv.CpHudInfoTexts.init ~= nil and cpEnv.CpHudInfoTexts.colorHeader ~= nil then
@@ -1939,6 +1939,19 @@ function HudColorSetting.new(custom_mt)
 
 		if cpEnv.CpBaseHud ~= nil and cpEnv.CpBaseHud.init ~= nil and cpEnv.CpBaseHud.HEADER_COLOR ~= nil then
 			AdditionalSettingsUtil.overwrittenFunction(cpEnv.CpBaseHud, "init", self, "cpBaseHud_init")
+		end
+	end
+
+	local adEnv = self:getModEnvByModName("AutoDrive")
+
+	if adEnv ~= nil then
+		if adEnv.ADHudIcon ~= nil and adEnv.ADHudIcon.onDraw ~= nil and adEnv.ADMessagesManager ~= nil and adEnv.ADMessagesManager.drawHud ~= nil and adEnv.AutoDrive ~= nil and adEnv.AutoDrive.currentColors ~= nil then
+			if adEnv.AutoDrive.settings ~= nil and adEnv.AutoDrive.settings.colorAssignmentMode ~= nil and adEnv.AutoDrive.settings.colorAssignmentMode.current ~= nil then
+				AdditionalSettingsUtil.overwrittenFunction(adEnv.ADHudIcon, "onDraw", self, "ad_draw")
+				AdditionalSettingsUtil.overwrittenFunction(adEnv.ADMessagesManager, "drawHud", self, "ad_draw")
+
+				self.adEnv = adEnv
+			end
 		end
 	end
 
@@ -2094,7 +2107,7 @@ function HudColorSetting:updateHudElements()
 	self:changeOverlaysColor(g_currentMission.hud.gameInfoDisplay, {"calendarIcon", "weatherIcon", "clockIcon", "clockHandHour", "clockHandMinute", "fastForwardIcon", "temperature", "temperatureUp", "temperatureDown"}, currentColor)
 	self:changeOverlaysColor(g_currentMission.hud.speedMeter, {"workingHours", "cruiseControl", "aiWorkerIcon", "aiSteeringIcon", "gearBg", "speedBg"}, currentColor)
 
-	local evEnv = self:getModEnvByModName("FS25_EnhancedVehicle")
+	local evEnv = self:getModEnvByModName("EnhancedVehicle")
 
 	if evEnv ~= nil then
 		if evEnv.FS25_EnhancedVehicle_HUD ~= nil and evEnv.FS25_EnhancedVehicle_HUD.COLOR ~= nil and evEnv.FS25_EnhancedVehicle_HUD.COLOR.ACTIVE ~= nil then
@@ -2112,7 +2125,7 @@ function HudColorSetting:updateHudElements()
 		end
 	end
 
-	local cpEnv = self:getModEnvByModName("FS25_Courseplay")
+	local cpEnv = self:getModEnvByModName("Courseplay")
 
 	if cpEnv ~= nil then
 		if cpEnv.CpHudInfoTexts ~= nil and cpEnv.CpHudInfoTexts.colorHeader ~= nil then
@@ -2121,6 +2134,14 @@ function HudColorSetting:updateHudElements()
 
 		if cpEnv.CpBaseHud ~= nil and cpEnv.CpBaseHud.HEADER_COLOR ~= nil then
 			cpEnv.CpBaseHud.HEADER_COLOR = currentColor
+		end
+	end
+
+	local maEnv = self:getModEnvByModName("manualAttach")
+
+	if maEnv ~= nil then
+		if maEnv.g_manualAttach ~= nil and maEnv.g_manualAttach.vehicleAttachmentHandler ~= nil and maEnv.g_manualAttach.vehicleAttachmentHandler.contextDisplay ~= nil then
+			self:changeOverlaysColor(maEnv.g_manualAttach.vehicleAttachmentHandler.contextDisplay, {"iconOverlay"}, currentColor)
 		end
 	end
 
@@ -2167,8 +2188,14 @@ function HudColorSetting:consoleCommandReloadHudColors()
 end
 
 function HudColorSetting:getModEnvByModName(name)
-	if name ~= nil and g_modIsLoaded[name] ~= nil then
-		return _G[name]
+	local possibleModNames = {"%s", "%s_main", "%s_update", "FS25_%s", "FS25_%s_main", "FS25_%s_update"}
+
+	for _, str in ipairs(possibleModNames) do
+		local modName = string.format(str, name)
+
+		if g_modIsLoaded[modName] ~= nil then
+			return _G[modName]
+		end
 	end
 end
 
@@ -2218,6 +2245,22 @@ end
 
 function HudColorSetting:cpBaseHud_init(cpBaseHud, superFunc, ...)
 	self:findOverlaysByColor(superFunc, {cpBaseHud, ...}, cpBaseHud.HEADER_COLOR)
+end
+
+function HudColorSetting:ad_draw(ad_target, superFunc, ...)
+	if self.adEnv.AutoDrive.settings.colorAssignmentMode.current == 2 then
+		superFunc(ad_target, ...)
+
+		return
+	end
+
+	local ad_color_header = self.adEnv.AutoDrive.currentColors.ad_color_header
+
+	self.adEnv.AutoDrive.currentColors.ad_color_header = HUD.COLOR.ACTIVE
+
+	superFunc(ad_target, ...)
+
+	self.adEnv.AutoDrive.currentColors.ad_color_header = ad_color_header
 end
 
 

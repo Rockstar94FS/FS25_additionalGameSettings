@@ -165,7 +165,7 @@ function AdditionalSettingsManager:draw()
 end
 
 function AdditionalSettingsManager:env_draw(superFunc)
-	local isRunning = g_currentMission ~= nil and g_currentMission.isLoaded and not g_gui:getIsGuiVisible() and not g_currentMission.hud:getIsFading() and g_currentMission.isRunning
+	local isRunning = g_currentMission ~= nil and g_currentMission.isLoaded and g_currentMission.isRunning and not g_gui:getIsGuiVisible() and g_currentMission.hud ~= nil and not g_currentMission.hud:getIsFading()
 
 	if isRunning then
 		AdditionalSettingsUtil.raiseEvent("onPreDraw")

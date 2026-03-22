@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<modDesc descVersion="100">
+<modDesc descVersion="105">
 	<author>Rockstar</author>
 
 	<version>1.0.0.5</version>
@@ -55,6 +55,10 @@ Changelog 1.0.0.4:
 
 Changelog 1.0.0.5:
 - Added tooltips for disabled interface options,
+- Improved compatibility with some mods.
+
+Changelog 1.0.0.6:
+- Added the ability to change the HUD color for mods: AutoDrive,
 - TODO...]]></en>
 		<de>
 			<![CDATA[Diese Mod fügt dem Pausenmenü einen neuen Einstellungstab hinzu.
@@ -98,6 +102,10 @@ Changelog 1.0.0.4:
 
 Changelog 1.0.0.5:
 - Hinweise für deaktivierte Schnittstellenoptionen hinzugefügt,
+- Verbesserte Kompatibilität mit einigen Mods.
+
+Changelog 1.0.0.6:
+- Möglichkeit zur Änderung der HUD-Farbe für die Mods hinzugefügt: AutoDrive,
 - TODO...]]></de>
 		<fr>
 			<![CDATA[Ce mod ajoute un nouvel onglet de paramètres au menu pause.
@@ -141,6 +149,10 @@ Changelog 1.0.0.4:
 
 Changelog 1.0.0.5:
 - Ajout d’info-bulles pour les options d’interface désactivées,
+- Compatibilité améliorée avec certains mods.
+
+Changelog 1.0.0.6:
+- Ajout de la possibilité de changer la couleur du HUD pour les mods : AutoDrive,
 - TODO...]]></fr>
 		<pl>
 			<![CDATA[Ten mod dodaje zakładkę z nowymi ustawieniami do menu pauzy.
@@ -184,6 +196,10 @@ Changelog 1.0.0.4:
 
 Changelog 1.0.0.5:
 - Dodano podpowiedzi dla wyłączonych opcji interfejsu,
+- Poprawiono kompatybilność z niektórymi modami.
+
+Changelog 1.0.0.6:
+- Dodano możliwość zmiany koloru HUD dla modów: AutoDrive,
 - TODO...]]></pl>
 		<ru>
 			<![CDATA[Этот мод добавляет новую вкладку настроек в меню паузы.
@@ -227,6 +243,10 @@ Changelog 1.0.0.4:
 
 Changelog 1.0.0.5:
 - Добавлены подсказки для отключённых параметров интерфейса,
+- Улучшена совместимость с некоторыми модами.
+
+Changelog 1.0.0.6:
+- Добавлена возможность изменения цвета HUD для модов: AutoDrive,
 - TODO...]]></ru>
 	</description>
 
