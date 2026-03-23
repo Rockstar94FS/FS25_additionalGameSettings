@@ -1954,6 +1954,7 @@ function HudColorSetting.new(custom_mt)
 
 		if cpEnv.CpBaseHud ~= nil and cpEnv.CpBaseHud.init ~= nil and cpEnv.CpBaseHud.HEADER_COLOR ~= nil then
 			AdditionalSettingsUtil.overwrittenFunction(cpEnv.CpBaseHud, "init", self, "cpBaseHud_init")
+			AdditionalSettingsUtil.appendedFunction(Vehicle, "delete", self, "vehicle_delete")
 		end
 	end
 
@@ -2216,6 +2217,7 @@ end
 
 function HudColorSetting:findOverlaysByColor(func, args, color)
 	local setColorBackup = Overlay.setColor
+	local foundedOverlays = {}
 
 	Overlay.setColor = function(overlay, r, g, b, a)
 		if color ~= nil then
@@ -2223,6 +2225,7 @@ function HudColorSetting:findOverlaysByColor(func, args, color)
 
 			if sR == r and sG == g and sB == b then
 				table.insert(self.modsOverlays, overlay)
+				table.insert(foundedOverlays, overlay)
 			end
 		end
 
@@ -2234,6 +2237,24 @@ function HudColorSetting:findOverlaysByColor(func, args, color)
 	end
 
 	Overlay.setColor = setColorBackup
+
+	if #foundedOverlays > 0 then
+		return foundedOverlays
+	end
+end
+
+function HudColorSetting:vehicle_delete(vehicle, ...)
+	if vehicle.spec_cpHud ~= nil and vehicle.spec_cpHud.hud ~= nil and vehicle.spec_cpHud.hud.ags_cp_overlays ~= nil then
+		for i = #self.modsOverlays, 1, -1 do
+			for _, cp_overlay in pairs(vehicle.spec_cpHud.hud.ags_cp_overlays) do
+				if self.modsOverlays[i] == cp_overlay then
+					table.remove(self.modsOverlays, i)
+				end
+			end
+		end
+
+		vehicle.spec_cpHud.hud.ags_cp_overlays = nil
+	end
 end
 
 function HudColorSetting:infoDisplayKeyValueBox_draw(infoDisplayKeyValueBox, superFunc, ...)
@@ -2259,7 +2280,7 @@ function HudColorSetting:cpHudInfoTexts_init(cpHudInfoTexts, superFunc, ...)
 end
 
 function HudColorSetting:cpBaseHud_init(cpBaseHud, superFunc, ...)
-	self:findOverlaysByColor(superFunc, {cpBaseHud, ...}, cpBaseHud.HEADER_COLOR)
+	cpBaseHud.ags_cp_overlays = self:findOverlaysByColor(superFunc, {cpBaseHud, ...}, cpBaseHud.HEADER_COLOR)
 end
 
 function HudColorSetting:ad_draw(ad_target, superFunc, ...)
@@ -2271,7 +2292,7 @@ function HudColorSetting:ad_draw(ad_target, superFunc, ...)
 
 	local ad_color_header = self.adEnv.AutoDrive.currentColors.ad_color_header
 
-	self.adEnv.AutoDrive.currentColors.ad_color_header = HUD.COLOR.ACTIVE
+	self.adEnv.AutoDrive.currentColors.ad_color_header = self:getCurrentColor()
 
 	superFunc(ad_target, ...)
 
