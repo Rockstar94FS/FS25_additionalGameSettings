@@ -1294,6 +1294,13 @@ function LightingSetting:onLoadSetting(xmlFile, key)
 	return true, state
 end
 
+function LightingSetting:getIsValidConfiguration(xmlFile, baseKey)
+	local gradingTime = xmlFile:getFloat(baseKey .. ".colorGrading.key(0)#timeHours")
+	local gradingFile = xmlFile:getString(baseKey .. ".colorGrading.key(0)#filename")
+
+	return gradingTime ~= nil and gradingFile ~= nil
+end
+
 function LightingSetting:loadCustomLightingConfigurations(directory)
 	local customLighting = {}
 	local customLightingTexts = {g_i18n:getText("ui_off")}
@@ -1318,18 +1325,6 @@ function LightingSetting:loadCustomLightingConfigurations(directory)
 		local lightingXML = XMLFile.loadIfExists("lightingXML", xmlFilename)
 
 		if lightingXML ~= nil then
-			local lighting = Lighting.new()
-
-			lighting:load(lightingXML, baseKey, baseDirectory)
-			lighting:setSnowHeightThreshold(SnowSystem.MIN_LAYER_HEIGHT)
-
-			local orgEnvMapTimes = #lighting.envMapTimes
-			local orgEnvMapBasePath = lighting.envMapBasePath
-
-			if lightingXML:getBool(baseKey .. ".envMap#attr10", #lighting.envMapTimes == 0 or lighting.envMapBasePath == nil) then
-				self:setLightingAttributes(lighting)
-			end
-
 			local text = filename
 			local nameXML = XMLFile.loadIfExists("nameXML", baseDirectory .. "name.xml")
 
@@ -1338,12 +1333,28 @@ function LightingSetting:loadCustomLightingConfigurations(directory)
 				nameXML:delete()
 			end
 
-			table.insert(customLighting, {lighting = lighting, id = filename, isMap = false})
-			table.insert(customLightingTexts, string.format("%s (%s)", text, g_i18n:getText("ags_ui_folder")))
+			if self:getIsValidConfiguration(lightingXML, baseKey) then
+				local lighting = Lighting.new()
 
-			AdditionalSettingsUtil.info("Lighting configuration loaded (%s):\n  -lighting: '%s'\n  -envMapBasePath: '%s'\n  -envMapTimes: '%d'\n  -useStoreEnvMap: '%s'\n", text, xmlFilename, orgEnvMapBasePath, orgEnvMapTimes, lighting.attr10 == true)
+				lighting:load(lightingXML, baseKey, baseDirectory)
+				lighting:setSnowHeightThreshold(SnowSystem.MIN_LAYER_HEIGHT)
 
-			lightingXML:delete()
+				local orgEnvMapTimes = #lighting.envMapTimes
+				local orgEnvMapBasePath = lighting.envMapBasePath
+
+				if lightingXML:getBool(baseKey .. ".envMap#attr10", #lighting.envMapTimes == 0 or lighting.envMapBasePath == nil) then
+					self:setLightingAttributes(lighting)
+				end
+
+				table.insert(customLighting, {lighting = lighting, id = filename, isMap = false})
+				table.insert(customLightingTexts, string.format("%s (%s)", text, g_i18n:getText("ags_ui_folder")))
+
+				AdditionalSettingsUtil.info("Lighting configuration loaded (%s):\n  -lighting: '%s'\n  -envMapBasePath: '%s'\n  -envMapTimes: '%d'\n  -useStoreEnvMap: '%s'\n", text, xmlFilename, orgEnvMapBasePath, orgEnvMapTimes, lighting.attr10 == true)
+
+				lightingXML:delete()
+			else
+				AdditionalSettingsUtil.error("Invalid lighting configuration '%s'!", text)
+			end
 		else
 			AdditionalSettingsUtil.error("File '%s' not found!", xmlFilename)
 		end
@@ -1364,29 +1375,33 @@ function LightingSetting:loadCustomLightingConfigurations(directory)
 				local environmentXML = XMLFile.load("environmentXML", environmentXMLFilename)
 
 				if environmentXML ~= nil then
-					local lighting = nil
+					if self:getIsValidConfiguration(environmentXML, "environment.lighting") then
+						local lighting = nil
 
-					if map == g_currentMission.missionInfo.map then
-						lighting = g_currentMission.environment.baseLighting
+						if map == g_currentMission.missionInfo.map then
+							lighting = g_currentMission.environment.baseLighting
+						else
+							lighting = Lighting.new()
+							lighting:load(environmentXML, "environment.lighting", baseDirectory)
+							lighting:setSnowHeightThreshold(SnowSystem.MIN_LAYER_HEIGHT)
+						end
+
+						local orgEnvMapTimes = #lighting.envMapTimes
+						local orgEnvMapBasePath = lighting.envMapBasePath
+
+						if environmentXML:getBool("environment.lighting.envMap#attr10", #lighting.envMapTimes == 0 or lighting.envMapBasePath == nil) then
+							self:setLightingAttributes(lighting)
+						end
+
+						table.insert(customLighting, {lighting = lighting, id = map.id, isMap = true})
+						table.insert(customLightingTexts, string.format("%s (%s)", map.title, g_i18n:getText("ui_map")))
+
+						AdditionalSettingsUtil.info("Lighting configuration loaded (%s):\n  -lighting: '%s'\n  -envMapBasePath: '%s'\n  -envMapTimes: '%d'\n  -useStoreEnvMap: '%s'\n", map.title, environmentXMLFilename, orgEnvMapBasePath, orgEnvMapTimes, lighting.attr10 == true)
+
+						environmentXML:delete()
 					else
-						lighting = Lighting.new()
-						lighting:load(environmentXML, "environment.lighting", baseDirectory)
-						lighting:setSnowHeightThreshold(SnowSystem.MIN_LAYER_HEIGHT)
+						AdditionalSettingsUtil.error("Invalid lighting configuration '%s'!", map.title)
 					end
-
-					local orgEnvMapTimes = #lighting.envMapTimes
-					local orgEnvMapBasePath = lighting.envMapBasePath
-
-					if environmentXML:getBool("environment.lighting.envMap#attr10", #lighting.envMapTimes == 0 or lighting.envMapBasePath == nil) then
-						self:setLightingAttributes(lighting)
-					end
-
-					table.insert(customLighting, {lighting = lighting, id = map.id, isMap = true})
-					table.insert(customLightingTexts, string.format("%s (%s)", map.title, g_i18n:getText("ui_map")))
-
-					AdditionalSettingsUtil.info("Lighting configuration loaded (%s):\n  -lighting: '%s'\n  -envMapBasePath: '%s'\n  -envMapTimes: '%d'\n  -useStoreEnvMap: '%s'\n", map.title, environmentXMLFilename, orgEnvMapBasePath, orgEnvMapTimes, lighting.attr10 == true)
-
-					environmentXML:delete()
 				end
 			end
 
