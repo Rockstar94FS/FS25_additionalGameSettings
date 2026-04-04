@@ -1628,33 +1628,45 @@ function QuitGameSetting:quitButtonCallback()
 		return
 	end
 
-	if not g_inGameMenu.playerAlreadySaved and not (g_inGameMenu.missionDynamicInfo.isMultiplayer and g_inGameMenu.missionDynamicInfo.isClient) then
-		local callback = function (yes)
-			if yes then
-				if g_inGameMenu.missionDynamicInfo.isMultiplayer and g_inGameMenu.isServer then
-					g_inGameMenu.server:broadcastEvent(ShutdownEvent.new())
-				end
-
-				requestExit()
-			end
-		end
-
-		YesNoDialog.show(callback, nil, g_i18n:getText(InGameMenu.L10N_SYMBOL.END_WITHOUT_SAVING))
-	else
+	if g_isDevelopmentVersion then
 		requestExit()
+		return
 	end
+
+	local text = g_i18n:getText(InGameMenu.L10N_SYMBOL.END_GAME)
+	local isMultiplayerClient = g_inGameMenu.missionDynamicInfo.isMultiplayer and g_inGameMenu.missionDynamicInfo.isClient
+
+	if not isMultiplayerClient and not g_inGameMenu.playerAlreadySaved then
+		text = g_i18n:getText(InGameMenu.L10N_SYMBOL.END_WITHOUT_SAVING)
+	end
+
+	local callback = function (yes)
+		if yes then
+			if g_inGameMenu.missionDynamicInfo.isMultiplayer and g_inGameMenu.isServer then
+				g_inGameMenu.server:broadcastEvent(ShutdownEvent.new())
+			end
+
+			requestExit()
+		end
+	end
+
+	YesNoDialog.show(callback, nil, text)
 end
 
 function QuitGameSetting:addIngameButtons()
-	local buttonToClone = g_inGameMenu.menuButton[1]
-	local newButton1 = buttonToClone:clone(buttonToClone.parent)
-	local newButton2 = buttonToClone:clone(buttonToClone.parent)
+	local numButtons = #g_inGameMenu.menuButton
 
-	newButton1.id = "menuButton[7]"
-	newButton2.id = "menuButton[8]"
+	if numButtons < 8 then
+		local buttonToClone = g_inGameMenu.menuButton[1]
+		local newButton1 = buttonToClone:clone(buttonToClone.parent)
+		local newButton2 = buttonToClone:clone(buttonToClone.parent)
 
-	table.insert(g_inGameMenu.menuButton, newButton1)
-	table.insert(g_inGameMenu.menuButton, newButton2)
+		newButton1.id = string.format("menuButton[%s]", numButtons + 1)
+		newButton2.id = string.format("menuButton[%s]", numButtons + 2)
+
+		table.insert(g_inGameMenu.menuButton, newButton1)
+		table.insert(g_inGameMenu.menuButton, newButton2)
+	end
 end
 
 
