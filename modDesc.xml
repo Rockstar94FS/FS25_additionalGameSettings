@@ -59,7 +59,8 @@ Changelog 1.0.0.5:
 
 Changelog 1.0.0.6:
 - Added the ability to change the HUD color for mods: AutoDrive,
-- TODO...]]></en>
+- The "Exit to Desktop" key now always triggers a notification before exiting the game,
+- Fixed a conflict with some mods.]]></en>
 		<de>
 			<![CDATA[Diese Mod fügt dem Pausenmenü einen neuen Einstellungstab hinzu.
 
@@ -106,7 +107,8 @@ Changelog 1.0.0.5:
 
 Changelog 1.0.0.6:
 - Möglichkeit zur Änderung der HUD-Farbe für die Mods hinzugefügt: AutoDrive,
-- TODO...]]></de>
+- Die Taste "Zum Desktop beenden" löst jetzt immer eine Benachrichtigung vor dem Verlassen des Spiels aus,
+- Ein Konflikt mit einigen Mods wurde behoben.]]></de>
 		<fr>
 			<![CDATA[Ce mod ajoute un nouvel onglet de paramètres au menu pause.
 
@@ -153,7 +155,8 @@ Changelog 1.0.0.5:
 
 Changelog 1.0.0.6:
 - Ajout de la possibilité de changer la couleur du HUD pour les mods : AutoDrive,
-- TODO...]]></fr>
+- La touche "Quitter vers le bureau" déclenche désormais toujours une notification avant de quitter le jeu,
+- Un conflit avec certains mods a été corrigé.]]></fr>
 		<pl>
 			<![CDATA[Ten mod dodaje zakładkę z nowymi ustawieniami do menu pauzy.
 
@@ -200,7 +203,8 @@ Changelog 1.0.0.5:
 
 Changelog 1.0.0.6:
 - Dodano możliwość zmiany koloru HUD dla modów: AutoDrive,
-- TODO...]]></pl>
+- Klawisz "Wyjdź do pulpitu" od teraz zawsze wywołuje powiadomienie przed wyjściem z gry,
+- Naprawiono konflikt z niektórymi modami.]]></pl>
 		<ru>
 			<![CDATA[Этот мод добавляет новую вкладку настроек в меню паузы.
 
@@ -247,7 +251,8 @@ Changelog 1.0.0.5:
 
 Changelog 1.0.0.6:
 - Добавлена возможность изменения цвета HUD для модов: AutoDrive,
-- TODO...]]></ru>
+- Клавиша "Выйти на рабочий стол" теперь всегда вызывает уведомление перед выходом из игры,
+- Исправлен конфликт с некоторыми модами.]]></ru>
 	</description>
 
 	<iconFilename>icon_additionalGameSettings.png</iconFilename>
