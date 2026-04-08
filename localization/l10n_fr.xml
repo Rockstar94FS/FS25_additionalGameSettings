@@ -74,5 +74,6 @@
 		<e k="ags_toolTip_easyMotorStartDisabled" v="Ce paramètre nécessite l’activation du démarrage manuel du moteur."/>
 		<e k="ags_toolTip_runModeDisabled" v="Ce paramètre nécessite l’activation de la course rapide en appuyant sur la touche."/>
 		<e k="ags_toolTip_clockDisabled" v="Ce paramètre nécessite l’activation de l’horloge avec la date actuelle."/>
+		<e k="ags_toolTip_autostartDisabled" v="Paramètre verrouillé par l'option &apos;-autoStart&apos;"/>
 	</elements>
 </l10n>

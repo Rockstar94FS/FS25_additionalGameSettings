@@ -74,5 +74,6 @@
 		<e k="ags_toolTip_easyMotorStartDisabled" v="This setting requires enabling manual engine start."/>
 		<e k="ags_toolTip_runModeDisabled" v="This setting requires enabling faster running by pressing the key."/>
 		<e k="ags_toolTip_clockDisabled" v="This setting requires enabling the clock with the current date."/>
+		<e k="ags_toolTip_autostartDisabled" v="Setting locked by the &apos;-autoStart&apos; parameter"/>
 	</elements>
 </l10n>

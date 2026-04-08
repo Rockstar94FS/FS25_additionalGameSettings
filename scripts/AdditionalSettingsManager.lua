@@ -20,6 +20,12 @@ AdditionalSettingsManager = {
 		MAP_LOAD = 1,
 		MAP_LOAD_FINISHED = 2,
 		MISSION_START = 3
+	},
+	TYPE = {
+		BOOL = 1,
+		INT = 2,
+		FLOAT = 3,
+		STRING = 4
 	}
 }
 
@@ -87,7 +93,6 @@ function AdditionalSettingsManager:loadAdditionalSettings()
 		guiCamera = GuiCameraSetting.new(),
 		quitGame = QuitGameSetting.new(),
 		clockColor = ClockColorSetting.new(),
-		framerateLimiter = FramerateLimiterSetting.new(),
 		clockBackground = ClockBackgroundSetting.new(),
 		blinkingWarnings = BlinkingWarningsSetting.new(),
 		clockBold = ClockBoldSetting.new(),
@@ -96,7 +101,11 @@ function AdditionalSettingsManager:loadAdditionalSettings()
 		walkMode = WalkModeSetting.new(),
 		crouchMode = CrouchModeSettings.new(),
 		runMode = RunModeSettings.new(),
-		debug = DebugSettings.new()
+		framerateLimiter = FramerateLimiterSetting.new(),
+		debug = DebugSettings.new(),
+		hdrPeakBrightness = HdrPeakBrightnessSetting.new(),
+		hdrContrast = HdrContrastSetting.new(),
+		overlayBrightness = OverlayBrightnessSetting.new()
 	}
 end
 
@@ -186,11 +195,7 @@ function AdditionalSettingsManager:getSettingStateByName(name)
 	local setting = self:getSettingByName(name)
 
 	if setting ~= nil then
-		if setting.active ~= nil then
-			return setting.active
-		elseif setting.state ~= nil then
-			return setting.state
-		end
+		return setting.state
 	end
 end
 
@@ -213,6 +218,12 @@ function AdditionalSettingsManager:getUIElement(setting)
 				return button
 			end
 		end
+
+		for slider, key in pairs(self.settingsPage.sliderMapping) do
+			if key == setting then
+				return slider
+			end
+		end
 	end
 end
 
@@ -231,11 +242,15 @@ function AdditionalSettingsManager:saveSettingsToXMLFile()
 				local key = string.format("settings.%s", id)
 				local customState = AdditionalSettingsUtil.callFunction(setting, "onSaveSetting", xmlFile, key)
 
-				if not customState then
-					if setting.active ~= nil then
-						xmlFile:setBool(key, setting.active)
-					elseif setting.state ~= nil then
+				if not customState and setting.state ~= nil then
+					if setting.type == AdditionalSettingsManager.TYPE.BOOL then
+						xmlFile:setBool(key, setting.state)
+					elseif setting.type == AdditionalSettingsManager.TYPE.INT then
 						xmlFile:setInt(key, setting.state)
+					elseif setting.type == AdditionalSettingsManager.TYPE.FLOAT then
+						xmlFile:setFloat(key, setting.state)
+					elseif setting.type == AdditionalSettingsManager.TYPE.STRING then
+						xmlFile:setString(key, setting.state)
 					end
 				end
 			end
@@ -259,19 +274,15 @@ function AdditionalSettingsManager:loadSettingsFromXMLFile()
 				local key = string.format("settings.%s", id)
 				local customState, savedState = AdditionalSettingsUtil.callFunction(setting, "onLoadSetting", xmlFile, key)
 
-				if not customState then
-					if setting.active ~= nil then
-						local active = xmlFile:getBool(key)
-
-						if active ~= nil and setting.active ~= active then
-							savedState = active
-						end
-					elseif setting.state ~= nil then
-						local state = xmlFile:getInt(key)
-
-						if state ~= nil and setting.state ~= state then
-							savedState = state
-						end
+				if not customState and setting.state ~= nil then
+					if setting.type == AdditionalSettingsManager.TYPE.BOOL then
+						savedState = xmlFile:getBool(key)
+					elseif setting.type == AdditionalSettingsManager.TYPE.INT then
+						savedState = xmlFile:getInt(key)
+					elseif setting.type == AdditionalSettingsManager.TYPE.FLOAT then
+						savedState = xmlFile:getFloat(key)
+					elseif setting.type == AdditionalSettingsManager.TYPE.STRING then
+						savedState = xmlFile:getString(key)
 					end
 				end
 
@@ -290,14 +301,9 @@ function AdditionalSettingsManager:applySettingStates(loadState)
 		if setting.loadState == loadState then
 			local state = self.settingStates[id]
 
-			if state ~= nil then
-				if setting.active ~= nil and setting.active ~= state then
-					setting.active = state
-					AdditionalSettingsUtil.callFunction(setting, "onStateChange", state, self:getUIElement(setting), true)
-				elseif setting.state ~= nil and setting.state ~= state then
-					setting.state = state
-					AdditionalSettingsUtil.callFunction(setting, "onStateChange", state, self:getUIElement(setting), true)
-				end
+			if state ~= nil and setting.state ~= state then
+				setting.state = state
+				AdditionalSettingsUtil.callFunction(setting, "onStateChange", state, self:getUIElement(setting), true)
 			end
 		end
 	end

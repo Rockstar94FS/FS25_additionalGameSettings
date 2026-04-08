@@ -13,8 +13,9 @@ local HUDSetting_mt = Class(HUDSetting)
 function HUDSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or HUDSetting_mt)
 
-	self.active = true
+	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.BOOL
 
 	return self
 end
@@ -38,7 +39,7 @@ function HUDSetting:onStateChange(state, checkboxElement, loadFromSavegame)
 end
 
 function HUDSetting:onTabOpen(checkboxElement)
-	self.active = g_currentMission.hud:getIsVisible()
+	self.state = g_currentMission.hud:getIsVisible()
 end
 
 
@@ -49,10 +50,11 @@ local CrosshairSetting_mt = Class(CrosshairSetting)
 function CrosshairSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or CrosshairSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
 	return self
 end
@@ -139,11 +141,12 @@ local DateSetting_mt = Class(DateSetting)
 function DateSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or DateSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-	AdditionalSettingsUtil.registerEventListener("onDelete", self)
-
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
+	AdditionalSettingsUtil.registerEventListener("onDelete", self)
 
 	self.dateFormat = ""
 
@@ -520,6 +523,7 @@ function ClockPositionSetting.new(custom_mt)
 
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.INT
 
 	return self
 end
@@ -536,10 +540,11 @@ local HourFormatSetting_mt = Class(HourFormatSetting)
 function HourFormatSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or HourFormatSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-
-	self.active = true
+	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
 	return self
 end
@@ -562,7 +567,7 @@ function HourFormatSetting:draw(gameInfoDisplay, superFunc)
 	local format = string.format
 
 	string.format = function (form, ...)
-		if not self.active then
+		if not self.state then
 			local dateForm = "%02d:%02d"
 
 			if form == dateForm then
@@ -605,13 +610,14 @@ local FadeEffectSetting_mt = Class(FadeEffectSetting)
 function FadeEffectSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or FadeEffectSetting_mt)
 
+	self.state = 0
+	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
+
 	AdditionalSettingsUtil.registerEventListener("onUpdate", self)
 	AdditionalSettingsUtil.registerEventListener("onPreDraw", self)
 	AdditionalSettingsUtil.appendedFunction(CameraManager, "setActiveCamera", self, "setActiveCamera")
 	AdditionalSettingsUtil.overwrittenFunction(g_gui, "changeScreen", self, "changeScreen")
-
-	self.state = 0
-	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 
 	local fadeOverlay = Overlay.new(g_baseHUDFilename, 0, 0, 1, 1)
 
@@ -695,11 +701,12 @@ local DialogBoxesSetting_mt = Class(DialogBoxesSetting)
 function DialogBoxesSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or DialogBoxesSetting_mt)
 
+	self.state = true
+	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
+
 	AdditionalSettingsUtil.registerEventListener("onUpdate", self)
 	AdditionalSettingsUtil.prependedFunction(InfoDialog, "setText", self, "setText")
-
-	self.active = true
-	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 
 	self.infoTexts = {
 		"shop_messageBoughtAnimals",
@@ -725,7 +732,7 @@ function DialogBoxesSetting.new(custom_mt)
 end
 
 function DialogBoxesSetting:onUpdate(dt)
-	if g_currentMission:getIsClient() and not self.active and self.dialogInstance ~= nil then
+	if g_currentMission:getIsClient() and not self.state and self.dialogInstance ~= nil then
 		self.dialogInstance:close()
 
 		if self.dialogInstance.onOk ~= nil then
@@ -741,7 +748,7 @@ function DialogBoxesSetting:onUpdate(dt)
 end
 
 function DialogBoxesSetting:setText(infoDialog, text)
-	if not self.active then
+	if not self.state then
 		for _, str in pairs(self.infoTexts) do
 			if text == g_i18n:getText(str) then
 				self.dialogInstance = infoDialog
@@ -759,10 +766,11 @@ local VehicleCameraSetting_mt = Class(VehicleCameraSetting)
 function VehicleCameraSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or VehicleCameraSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
 	self.yaw = 0
 	self.pitch = 0
@@ -832,10 +840,11 @@ local PlayerCameraSetting_mt = Class(PlayerCameraSetting)
 function PlayerCameraSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or PlayerCameraSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
 	self.yaw = 0
 	self.pitch = 0
@@ -917,10 +926,11 @@ local EasyMotorStartSetting_mt = Class(EasyMotorStartSetting)
 function EasyMotorStartSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or EasyMotorStartSetting_mt)
 
-	AdditionalSettingsUtil.overwrittenFunction(Drivable, "actionEventAccelerate", self, "actionEventAccelerate")
-
-	self.active = false
+	self.state = false
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
+
+	AdditionalSettingsUtil.overwrittenFunction(Drivable, "actionEventAccelerate", self, "actionEventAccelerate")
 
 	return self
 end
@@ -934,7 +944,7 @@ function EasyMotorStartSetting:actionEventAccelerate(drivable, superFunc, action
 		local isPowered, isPoweredWarning = drivable:getIsPowered()
 
 		if not isPowered and isPoweredWarning ~= nil then
-			if self.active and not drivable:getIsAIActive() and not drivable:getIsMotorStarted() and drivable:getCanMotorRun() and isPoweredWarning == g_i18n:getText("warning_motorNotStarted") then
+			if self.state and not drivable:getIsAIActive() and not drivable:getIsMotorStarted() and drivable:getCanMotorRun() and isPoweredWarning == g_i18n:getText("warning_motorNotStarted") then
 				drivable:startMotor()
 			else
 				g_currentMission:showBlinkingWarning(isPoweredWarning, 2000)
@@ -963,16 +973,17 @@ function AutostartSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or AutostartSetting_mt)
 	local isParamSet = StartParams.getIsSet("autoStart")
 
-	self.active = isParamSet
+	self.state = isParamSet
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
 
 	self.isParamSet = isParamSet
 
 	return self
 end
 
-function AutostartSetting:onCreateElement(checkboxElement)
-	checkboxElement.parent:setVisible(not self.isParamSet)
+function AutostartSetting:onTabOpen(checkboxElement)
+	checkboxElement:setDisabled(self.isParamSet)
 end
 
 function AutostartSetting:onStateChange(state, checkboxElement, loadFromSavegame)
@@ -991,6 +1002,7 @@ function StoreItemsSetting.new(custom_mt)
 
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
 
 	return self
 end
@@ -1212,11 +1224,12 @@ local LightingSetting_mt = Class(LightingSetting)
 function LightingSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or LightingSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-	AdditionalSettingsUtil.registerEventListener("onDelete", self)
-
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
+	AdditionalSettingsUtil.registerEventListener("onDelete", self)
 
 	return self
 end
@@ -1484,10 +1497,11 @@ local DoFSetting_mt = Class(DoFSetting)
 function DoFSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or DoFSetting_mt)
 
-	AdditionalSettingsUtil.overwrittenFunction(g_depthOfFieldManager, "applyInfo", self, "applyInfo")
-
-	self.active = true
+	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.BOOL
+
+	AdditionalSettingsUtil.overwrittenFunction(g_depthOfFieldManager, "applyInfo", self, "applyInfo")
 
 	self.defaultStateBackup = g_depthOfFieldManager.defaultState
 	self.customState = {0.01, 0.01, 0.01, 10000, 10000, false}
@@ -1496,7 +1510,7 @@ function DoFSetting.new(custom_mt)
 end
 
 function DoFSetting:applyInfo(depthOfFieldManager, superFunc, nearCoCRadius, nearBlurEnd, farCoCRadius, farBlurStart, farBlurEnd, applyToSky)
-	if not self.active then
+	if not self.state then
 		depthOfFieldManager:reset()
 	else
 		superFunc(depthOfFieldManager, nearCoCRadius, nearBlurEnd, farCoCRadius, farBlurStart, farBlurEnd, applyToSky)
@@ -1529,12 +1543,13 @@ local CameraCollisionsSetting_mt = Class(CameraCollisionsSetting)
 function CameraCollisionsSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or CameraCollisionsSetting_mt)
 
+	self.state = true
+	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
+
 	if not g_modIsLoaded["FS25_disableVehicleCameraCollision"] then
 		AdditionalSettingsUtil.overwrittenFunction(VehicleCamera, "getCollisionDistance", self, "getCollisionDistance")
 	end
-
-	self.active = true
-	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 
 	return self
 end
@@ -1544,7 +1559,7 @@ function CameraCollisionsSetting:onCreateElement(checkboxElement)
 end
 
 function CameraCollisionsSetting:getCollisionDistance(vehicleCamera, superFunc)
-	if not self.active then
+	if not self.state then
 		return false, nil, nil, nil, nil, nil
 	end
 
@@ -1559,16 +1574,17 @@ local GuiCameraSetting_mt = Class(GuiCameraSetting)
 function GuiCameraSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or GuiCameraSetting_mt)
 
-	AdditionalSettingsUtil.overwrittenFunction(GuiTopDownCamera, "getMouseEdgeScrollingMovement", self, "getMouseEdgeScrollingMovement")
-
-	self.active = true
+	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
+
+	AdditionalSettingsUtil.overwrittenFunction(GuiTopDownCamera, "getMouseEdgeScrollingMovement", self, "getMouseEdgeScrollingMovement")
 
 	return self
 end
 
 function GuiCameraSetting:getMouseEdgeScrollingMovement(guiTopDownCamera, superFunc)
-	if not self.active then
+	if not self.state then
 		return 0, 0
 	end
 
@@ -1628,7 +1644,7 @@ function QuitGameSetting:quitButtonCallback()
 		return
 	end
 
-	if g_isDevelopmentVersion then
+	if gEnv.g_isDevelopmentVersion then
 		requestExit()
 		return
 	end
@@ -1677,11 +1693,12 @@ local ClockColorSetting_mt = Class(ClockColorSetting)
 function ClockColorSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or ClockColorSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-	AdditionalSettingsUtil.registerEventListener("onDelete", self)
-
 	self.state = 3
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
+	AdditionalSettingsUtil.registerEventListener("onDelete", self)
 
 	self.customColor = nil
 
@@ -1840,51 +1857,6 @@ function ClockColorSetting:consoleCommandReloadClockColors()
 end
 
 
-FramerateLimiterSetting = {}
-
-local FramerateLimiterSetting_mt = Class(FramerateLimiterSetting)
-
-function FramerateLimiterSetting.new(custom_mt)
-	local self = setmetatable({}, custom_mt or FramerateLimiterSetting_mt)
-
-	self.state = 4
-
-	local loadState = AdditionalSettingsManager.LOAD_STATE.NO
-
-	if g_dedicatedServer == nil and gEnv.g_isDevelopmentVersion then
-		loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
-		Platform.hasAdjustableFrameLimit = false
-	end
-
-	self.loadState = loadState
-	self.limit = {30, 40, 50, 60, 75, 100, 120, 144, 165, 240}
-
-	return self
-end
-
-function FramerateLimiterSetting:onCreateElement(optionElement)
-	optionElement.parent:setVisible(self.loadState ~= AdditionalSettingsManager.LOAD_STATE.NO)
-
-	local texts = {
-		g_i18n:getText("ui_off")
-	}
-
-	for _, limit in pairs(self.limit) do
-		table.insert(texts, tostring(limit))
-	end
-
-	optionElement:setTexts(texts)
-end
-
-function FramerateLimiterSetting:onStateChange(state, optionElement, loadFromSavegame)
-	local maxFrameLimit = DedicatedServer.MAX_FRAME_LIMIT
-
-	DedicatedServer.MAX_FRAME_LIMIT = self.limit[state] or math.huge
-	DedicatedServer:raiseFramerate()
-	DedicatedServer.MAX_FRAME_LIMIT = maxFrameLimit
-end
-
-
 ClockBackgroundSetting = {}
 
 local ClockBackgroundSetting_mt = Class(ClockBackgroundSetting)
@@ -1892,8 +1864,9 @@ local ClockBackgroundSetting_mt = Class(ClockBackgroundSetting)
 function ClockBackgroundSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or ClockBackgroundSetting_mt)
 
-	self.active = true
+	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
 
 	return self
 end
@@ -1910,8 +1883,9 @@ local BlinkingWarningsSetting_mt = Class(BlinkingWarningsSetting)
 function BlinkingWarningsSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or BlinkingWarningsSetting_mt)
 
-	self.active = true
+	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
 
 	AdditionalSettingsUtil.overwrittenFunction(g_currentMission, "showBlinkingWarning", self, "showBlinkingWarning")
 
@@ -1919,7 +1893,7 @@ function BlinkingWarningsSetting.new(custom_mt)
 end
 
 function BlinkingWarningsSetting:showBlinkingWarning(currentMission, superFunc, text, duration, priority)
-	if self.active then
+	if self.state then
 		superFunc(currentMission, text, duration, priority)
 	end
 end
@@ -1932,8 +1906,9 @@ local ClockBoldSetting_mt = Class(ClockBoldSetting)
 function ClockBoldSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or ClockBoldSetting_mt)
 
-	self.active = true
+	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.BOOL
 
 	return self
 end
@@ -1949,6 +1924,10 @@ local HudColorSetting_mt = Class(HudColorSetting)
 
 function HudColorSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or HudColorSetting_mt)
+
+	self.state = 0
+	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.INT
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 	AdditionalSettingsUtil.registerEventListener("onDelete", self)
@@ -1982,9 +1961,6 @@ function HudColorSetting.new(custom_mt)
 			end
 		end
 	end
-
-	self.state = 0
-	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 
 	self.hudColorBackup = HUD.COLOR.ACTIVE
 	self.customColor = nil
@@ -2319,10 +2295,11 @@ local TorchSetting_mt = Class(TorchSetting)
 function TorchSetting.new(custom_mt)
 	local self = setmetatable({}, custom_mt or TorchSetting_mt)
 
-	AdditionalSettingsUtil.registerEventListener("onLoad", self)
-
-	self.active = false
+	self.state = false
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+	self.type = AdditionalSettingsManager.TYPE.BOOL
+
+	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
 	return self
 end
@@ -2332,7 +2309,7 @@ function TorchSetting:onLoad(filename)
 end
 
 function TorchSetting:setFlashlightIsActive(player, superFunc, isActive, ...)
-	if self.active and not isActive and player.currentHandTool ~= nil and player.currentHandTool.isFlashlight then
+	if self.state and not isActive and player.currentHandTool ~= nil and player.currentHandTool.isFlashlight then
 		player:setCurrentHandTool(nil)
 	else
 		superFunc(player, isActive, ...)
@@ -2349,6 +2326,7 @@ function WalkModeSetting.new(custom_mt)
 
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.INT
 
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "update", self, "update")
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "onInputRun", self, "onInputRun")
@@ -2449,6 +2427,7 @@ function CrouchModeSettings.new(custom_mt)
 
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.INT
 
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "update", self, "update")
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "onInputCrouch", self, "onInputCrouch")
@@ -2494,6 +2473,7 @@ function RunModeSettings.new(custom_mt)
 
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
+	self.type = AdditionalSettingsManager.TYPE.INT
 
 	self.modes = {1.5, 2, 2.5, 3, 3.5, 4}
 
@@ -2522,6 +2502,53 @@ function RunModeSettings:getRunningSpeed()
 	end
 
 	return self.modes[self.state] or 1
+end
+
+
+FramerateLimiterSetting = {}
+
+local FramerateLimiterSetting_mt = Class(FramerateLimiterSetting)
+
+function FramerateLimiterSetting.new(custom_mt)
+	local self = setmetatable({}, custom_mt or FramerateLimiterSetting_mt)
+
+	self.state = 4
+
+	local loadState = AdditionalSettingsManager.LOAD_STATE.NO
+
+	if g_dedicatedServer == nil and gEnv.g_isDevelopmentVersion then
+		loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
+		Platform.hasAdjustableFrameLimit = false
+	end
+
+	self.loadState = loadState
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	self.limit = {30, 40, 50, 60, 75, 100, 120, 144, 165, 240}
+
+	return self
+end
+
+function FramerateLimiterSetting:onCreateElement(optionElement)
+	optionElement.parent:setVisible(self.loadState ~= AdditionalSettingsManager.LOAD_STATE.NO)
+
+	local texts = {
+		g_i18n:getText("ui_off")
+	}
+
+	for _, limit in pairs(self.limit) do
+		table.insert(texts, tostring(limit))
+	end
+
+	optionElement:setTexts(texts)
+end
+
+function FramerateLimiterSetting:onStateChange(state, optionElement, loadFromSavegame)
+	local maxFrameLimit = DedicatedServer.MAX_FRAME_LIMIT
+
+	DedicatedServer.MAX_FRAME_LIMIT = self.limit[state] or math.huge
+	DedicatedServer:raiseFramerate()
+	DedicatedServer.MAX_FRAME_LIMIT = maxFrameLimit
 end
 
 
@@ -2576,4 +2603,76 @@ function DebugSettings:consoleCommandPrintTable(inputTable, depth, maxDepth)
 	else
 		return "Usage: agsPrintTable <table> <depth> <maxDepth>"
 	end
+end
+
+
+HdrPeakBrightnessSetting = {}
+
+local HdrPeakBrightnessSetting_mt = Class(HdrPeakBrightnessSetting)
+
+function HdrPeakBrightnessSetting.new(custom_mt)
+	local self = setmetatable({}, custom_mt or HdrPeakBrightnessSetting_mt)
+
+	self.state = Utils.getValueIndex(getBrightnessNits(), g_settingsModel.hdrPeakBrightnessValues)
+	self.loadState = gEnv.g_isDevelopmentVersion and getHdrAvailable() and getScreenHdrOutput() and AdditionalSettingsManager.LOAD_STATE.MAP_LOAD or AdditionalSettingsManager.LOAD_STATE.NO
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	return self
+end
+
+function HdrPeakBrightnessSetting:onCreateElement(sliderElement)
+	sliderElement:setTexts(g_settingsModel:getHDRPeakBrightnessTexts())
+	sliderElement.parent:setVisible(self.loadState ~= AdditionalSettingsManager.LOAD_STATE.NO)
+end
+
+function HdrPeakBrightnessSetting:onStateChange(value, sliderElement, loadFromSavegame)
+	setBrightnessNits(g_settingsModel.hdrPeakBrightnessValues[value])
+end
+
+
+HdrContrastSetting = {}
+
+local HdrContrastSetting_mt = Class(HdrContrastSetting)
+
+function HdrContrastSetting.new(custom_mt)
+	local self = setmetatable({}, custom_mt or HdrContrastSetting_mt)
+
+	self.state = Utils.getValueIndex(getHDRGamma(), g_settingsModel.hdrContrastValues)
+	self.loadState = gEnv.g_isDevelopmentVersion and getHdrAvailable() and getScreenHdrOutput() and AdditionalSettingsManager.LOAD_STATE.MAP_LOAD or AdditionalSettingsManager.LOAD_STATE.NO
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	return self
+end
+
+function HdrContrastSetting:onCreateElement(sliderElement)
+	sliderElement:setTexts(g_settingsModel:getHDRContrastTexts())
+	sliderElement.parent:setVisible(self.loadState ~= AdditionalSettingsManager.LOAD_STATE.NO)
+end
+
+function HdrContrastSetting:onStateChange(value, sliderElement, loadFromSavegame)
+	setHDRGamma(g_settingsModel.hdrContrastValues[value])
+end
+
+
+OverlayBrightnessSetting = {}
+
+local OverlayBrightnessSetting_mt = Class(OverlayBrightnessSetting)
+
+function OverlayBrightnessSetting.new(custom_mt)
+	local self = setmetatable({}, custom_mt or OverlayBrightnessSetting_mt)
+
+	self.state = Utils.getValueIndex(getOverlayBrightnessNits(), g_settingsModel.overlayBrightnessValues)
+	self.loadState = gEnv.g_isDevelopmentVersion and getHdrAvailable() and getScreenHdrOutput() and AdditionalSettingsManager.LOAD_STATE.MAP_LOAD or AdditionalSettingsManager.LOAD_STATE.NO
+	self.type = AdditionalSettingsManager.TYPE.INT
+
+	return self
+end
+
+function OverlayBrightnessSetting:onCreateElement(sliderElement)
+	sliderElement:setTexts(g_settingsModel:getOverlayBrightnessTexts())
+	sliderElement.parent:setVisible(self.loadState ~= AdditionalSettingsManager.LOAD_STATE.NO)
+end
+
+function OverlayBrightnessSetting:onStateChange(value, sliderElement, loadFromSavegame)
+	setOverlayBrightnessNits(g_settingsModel.overlayBrightnessValues[value])
 end

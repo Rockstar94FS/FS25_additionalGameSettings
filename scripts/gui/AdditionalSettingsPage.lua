@@ -26,6 +26,7 @@ function AdditionalSettingsPage.new(subclass_mt)
 	self.checkboxMapping = {}
 	self.optionMapping = {}
 	self.buttonMapping = {}
+	self.sliderMapping = {}
 
 	return self
 end
@@ -62,6 +63,10 @@ function AdditionalSettingsPage:initialize(settingsManager)
 	self.buttonMapping[self.buttonDateColor] = addittionalSettings.clockColor
 	self.buttonMapping[self.buttonHudColor] = addittionalSettings.hudColor
 
+	self.sliderMapping[self.sliderHdrPeakBrightness] = addittionalSettings.hdrPeakBrightness
+	self.sliderMapping[self.sliderHdrContrast] = addittionalSettings.hdrContrast
+	self.sliderMapping[self.sliderOverlayBrightness] = addittionalSettings.overlayBrightness
+
 	for checkboxElement, settingsKey in pairs(self.checkboxMapping) do
 		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", checkboxElement)
 	end
@@ -72,6 +77,10 @@ function AdditionalSettingsPage:initialize(settingsManager)
 
 	for buttonElement, settingsKey in pairs(self.buttonMapping) do
 		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", buttonElement)
+	end
+
+	for sliderElement, settingsKey in pairs(self.sliderMapping) do
+		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", sliderElement)
 	end
 
 	self.settingsManager = settingsManager
@@ -112,7 +121,7 @@ end
 function AdditionalSettingsPage:updateAdditionalSettings()
 	for checkboxElement, settingsKey in pairs(self.checkboxMapping) do
 		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", checkboxElement)
-		checkboxElement:setIsChecked(settingsKey.active, true)
+		checkboxElement:setIsChecked(settingsKey.state, true)
 	end
 
 	for optionElement, settingsKey in pairs(self.optionMapping) do
@@ -122,6 +131,11 @@ function AdditionalSettingsPage:updateAdditionalSettings()
 
 	for buttonElement, settingsKey in pairs(self.buttonMapping) do
 		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", buttonElement)
+	end
+
+	for sliderElement, settingsKey in pairs(self.sliderMapping) do
+		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", sliderElement)
+		sliderElement:setState(settingsKey.state, nil, true)
 	end
 end
 
@@ -148,7 +162,7 @@ function AdditionalSettingsPage:onClickCheckbox(state, checkboxElement)
 	if checkboxMapping ~= nil then
 		local newState = state == CheckedOptionElement.STATE_CHECKED
 
-		checkboxMapping.active = newState
+		checkboxMapping.state = newState
 		AdditionalSettingsUtil.callFunction(checkboxMapping, "onStateChange", newState, checkboxElement, false)
 		originalTarget.isDirty = true
 	end
@@ -173,6 +187,17 @@ function AdditionalSettingsPage:onClickButton(buttonElement)
 
 	if buttonMapping ~= nil then
 		AdditionalSettingsUtil.callFunction(buttonMapping, "onClickButton", buttonElement)
+		originalTarget.isDirty = true
+	end
+end
+
+function AdditionalSettingsPage:onClickSlider(value, sliderElement)
+	local originalTarget = g_additionalSettingsManager.settingsPage
+	local sliderMapping = originalTarget.sliderMapping[sliderElement]
+
+	if sliderMapping ~= nil then
+		sliderMapping.state = value
+		AdditionalSettingsUtil.callFunction(sliderMapping, "onStateChange", value, sliderElement, false)
 		originalTarget.isDirty = true
 	end
 end

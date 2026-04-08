@@ -74,5 +74,6 @@
 		<e k="ags_toolTip_easyMotorStartDisabled" v="此设置需要启用手动引擎启动。"/>
 		<e k="ags_toolTip_runModeDisabled" v="此设置需要启用按键加速奔跑功能。"/>
 		<e k="ags_toolTip_clockDisabled" v="此设置需要启用当前日期时钟显示。"/>
+		<e k="ags_toolTip_autostartDisabled" v="设置已被&apos;-autoStart&apos;参数锁定"/>
 	</elements>
 </l10n>

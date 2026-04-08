@@ -86,5 +86,6 @@
 		<e k="ags_toolTip_easyMotorStartDisabled" v="To ustawienie wymaga włącznia manualnego rozruchu silnika."/>
 		<e k="ags_toolTip_runModeDisabled" v="To ustawienie wymaga włączenia szybszego biegania poprzez naciśnięcie klawisza."/>
 		<e k="ags_toolTip_clockDisabled" v="To ustawienie wymaga włączenia zegara z aktualną datą."/>
+		<e k="ags_toolTip_autostartDisabled" v="Ustawienie zablokowane przez parametr &apos;-autoStart&apos;"/>
 	</elements>
 </l10n>

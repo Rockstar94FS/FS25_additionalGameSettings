@@ -74,5 +74,6 @@
 		<!-- <e k="ags_toolTip_easyMotorStartDisabled" v="TODO"/> -->
 		<!-- <e k="ags_toolTip_runModeDisabled" v="TODO"/> -->
 		<!-- <e k="ags_toolTip_clockDisabled" v="TODO"/> -->
+		<!-- <e k="ags_toolTip_autostartDisabled" v="TODO"/> -->
 	</elements>
 </l10n>

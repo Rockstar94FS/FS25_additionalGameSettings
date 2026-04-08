@@ -66,6 +66,9 @@
 					<BinaryOption profile="fs25_settingsBinaryOption" onClick="onClickCheckbox" id="checkAutostart">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_autostart"/>
 					</BinaryOption>
+					<Button profile="fs25_settingsMultiTextOptionLocked" name="iconDisabled" onClick="onClickLockedIcon" onFocus="onFocusLockedIcon">
+						<Text profile="fs25_multiTextOptionTooltip" text="$l10n_ags_toolTip_autostartDisabled" position="940px 0px"/>
+					</Button>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_autostart"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
@@ -79,6 +82,27 @@
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_framerateLimiter"/>
 					</MultiTextOption>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_framerateLimiter"/>
+				</Bitmap>
+				<Bitmap profile="fs25_multiTextOptionContainer">
+					<OptionSlider profile="fs25_settingsSliderOption" onClick="onClickSlider" id="sliderHdrPeakBrightness">
+						<Text profile="fs25_settingsSliderOptionText" name="text"/>
+						<Text profile="fs25_settingsSliderOptioTooltip" name="ignore" text="$l10n_setting_hdrPeakBrightness"/>
+					</OptionSlider>
+					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_setting_hdrPeakBrightness"/>
+				</Bitmap>
+				<Bitmap profile="fs25_multiTextOptionContainer">
+					<OptionSlider profile="fs25_settingsSliderOption" onClick="onClickSlider" id="sliderHdrContrast">
+						<Text profile="fs25_settingsSliderOptionText" name="text"/>
+						<Text profile="fs25_settingsSliderOptioTooltip" name="ignore" text="$l10n_setting_hdrContrast"/>
+					</OptionSlider>
+					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_setting_hdrContrast"/>
+				</Bitmap>
+				<Bitmap profile="fs25_multiTextOptionContainer">
+					<OptionSlider profile="fs25_settingsSliderOption" onClick="onClickSlider" id="sliderOverlayBrightness">
+						<Text profile="fs25_settingsSliderOptionText" name="text"/>
+						<Text profile="fs25_settingsSliderOptioTooltip" name="ignore" text="$l10n_setting_overlayBrightness"/>
+					</OptionSlider>
+					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_setting_overlayBrightness"/>
 				</Bitmap>
 				<Text profile="fs25_settingsSectionHeader" name="sectionHeader" text="$l10n_modHub_gameplay"/>
 				<Bitmap profile="fs25_multiTextOptionContainer">
@@ -213,6 +237,21 @@
 		</GuiElement>
 	</GuiElement>
 	<GUIProfiles>
+		<Profile name="fs25_settingsSliderOptionText" extends="fs25_optionSliderText" with="anchorMiddleRight">
+			<position value="55px 0px"/>
+			<width value="55px"/>
+			<textAlignment value="right"/>
+			<absoluteSizeOffset value="0px 0px"/>
+		</Profile>
+		<Profile name="fs25_settingsSliderOption" extends="fs25_optionSlider" with="anchorMiddleRight">
+			<width value="210px"/>
+			<position value="-67px 0px"/>
+			<focusOnHighlight value="true"/>
+			<wrap value="false"/>
+		</Profile>
+		<Profile name="fs25_settingsSliderOptioTooltip" extends="fs25_multiTextOptionTooltip" with="pivotMiddleRight">
+			<position value="705px 0px"/>
+		</Profile>
 		<Profile name="fs25_settingsColorButton" extends="fs25_colorButton" with="pivotMiddleRight">
 			<size value="276px 32px"/>
 			<position value="-12px 0px"/>

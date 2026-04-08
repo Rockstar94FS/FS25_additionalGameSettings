@@ -74,5 +74,6 @@
 		<e k="ags_toolTip_easyMotorStartDisabled" v="Diese Einstellung erfordert die Aktivierung des manuellen Motorstarts."/>
 		<e k="ags_toolTip_runModeDisabled" v="Diese Einstellung erfordert das Aktivieren des schnelleren Laufens durch Drücken der Taste."/>
 		<e k="ags_toolTip_clockDisabled" v="Diese Einstellung erfordert das Aktivieren der Uhr mit dem aktuellen Datum."/>
+		<e k="ags_toolTip_autostartDisabled" v="Einstellung durch den Parameter &apos;-autoStart&apos; gesperrt"/>
 	</elements>
 </l10n>

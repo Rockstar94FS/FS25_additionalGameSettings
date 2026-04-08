@@ -74,5 +74,6 @@
 		<e k="ags_toolTip_easyMotorStartDisabled" v="Этот параметр требует включения ручного запуска двигателя."/>
 		<e k="ags_toolTip_runModeDisabled" v="Этот параметр требует включения быстрого бега путем нажатия клавиши."/>
 		<e k="ags_toolTip_clockDisabled" v="Этот параметр требует включения часов с текущей датой."/>
+		<e k="ags_toolTip_autostartDisabled" v="Параметр заблокирован параметром &apos;-autoStart&apos;"/>
 	</elements>
 </l10n>
