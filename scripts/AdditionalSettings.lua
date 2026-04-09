@@ -16,6 +16,7 @@ function HUDSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkHUD"
 
 	return self
 end
@@ -53,6 +54,7 @@ function CrosshairSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiCrosshair"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
@@ -144,6 +146,7 @@ function DateSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiDate"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 	AdditionalSettingsUtil.registerEventListener("onDelete", self)
@@ -524,6 +527,7 @@ function ClockPositionSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiClockPosition"
 
 	return self
 end
@@ -543,6 +547,7 @@ function HourFormatSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkHourFormat"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
@@ -613,6 +618,7 @@ function FadeEffectSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiFadeEffect"
 
 	AdditionalSettingsUtil.registerEventListener("onUpdate", self)
 	AdditionalSettingsUtil.registerEventListener("onPreDraw", self)
@@ -704,6 +710,7 @@ function DialogBoxesSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkDialogBoxes"
 
 	AdditionalSettingsUtil.registerEventListener("onUpdate", self)
 	AdditionalSettingsUtil.prependedFunction(InfoDialog, "setText", self, "setText")
@@ -769,6 +776,7 @@ function VehicleCameraSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiVehicleCamera"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
@@ -843,6 +851,7 @@ function PlayerCameraSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiPlayerCamera"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
@@ -929,6 +938,7 @@ function EasyMotorStartSetting.new(custom_mt)
 	self.state = false
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkEasyMotorStart"
 
 	AdditionalSettingsUtil.overwrittenFunction(Drivable, "actionEventAccelerate", self, "actionEventAccelerate")
 
@@ -976,6 +986,7 @@ function AutostartSetting.new(custom_mt)
 	self.state = isParamSet
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkAutostart"
 
 	self.isParamSet = isParamSet
 
@@ -1003,6 +1014,7 @@ function StoreItemsSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "mulitStoreItems"
 
 	return self
 end
@@ -1227,6 +1239,7 @@ function LightingSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiLighting"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 	AdditionalSettingsUtil.registerEventListener("onDelete", self)
@@ -1500,6 +1513,7 @@ function DoFSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkDoF"
 
 	AdditionalSettingsUtil.overwrittenFunction(g_depthOfFieldManager, "applyInfo", self, "applyInfo")
 
@@ -1546,6 +1560,7 @@ function CameraCollisionsSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkCameraCollisions"
 
 	if not g_modIsLoaded["FS25_disableVehicleCameraCollision"] then
 		AdditionalSettingsUtil.overwrittenFunction(VehicleCamera, "getCollisionDistance", self, "getCollisionDistance")
@@ -1577,6 +1592,7 @@ function GuiCameraSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkGuiCamera"
 
 	AdditionalSettingsUtil.overwrittenFunction(GuiTopDownCamera, "getMouseEdgeScrollingMovement", self, "getMouseEdgeScrollingMovement")
 
@@ -1696,6 +1712,7 @@ function ClockColorSetting.new(custom_mt)
 	self.state = 3
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "buttonDateColor"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 	AdditionalSettingsUtil.registerEventListener("onDelete", self)
@@ -1867,6 +1884,7 @@ function ClockBackgroundSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkClockBackground"
 
 	return self
 end
@@ -1886,6 +1904,7 @@ function BlinkingWarningsSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkBlinkingWarnings"
 
 	AdditionalSettingsUtil.overwrittenFunction(g_currentMission, "showBlinkingWarning", self, "showBlinkingWarning")
 
@@ -1909,6 +1928,7 @@ function ClockBoldSetting.new(custom_mt)
 	self.state = true
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkClockBold"
 
 	return self
 end
@@ -1928,6 +1948,7 @@ function HudColorSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "buttonHudColor"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 	AdditionalSettingsUtil.registerEventListener("onDelete", self)
@@ -2298,6 +2319,7 @@ function TorchSetting.new(custom_mt)
 	self.state = false
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.BOOL
+	self.elementName = "checkTorch"
 
 	AdditionalSettingsUtil.registerEventListener("onLoad", self)
 
@@ -2327,6 +2349,7 @@ function WalkModeSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiWalkMode"
 
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "update", self, "update")
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "onInputRun", self, "onInputRun")
@@ -2428,6 +2451,7 @@ function CrouchModeSettings.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiCrouchMode"
 
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "update", self, "update")
 	AdditionalSettingsUtil.appendedFunction(PlayerInputComponent, "onInputCrouch", self, "onInputCrouch")
@@ -2474,6 +2498,7 @@ function RunModeSettings.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MAP_LOAD
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "multiRunMode"
 
 	self.modes = {1.5, 2, 2.5, 3, 3.5, 4}
 
@@ -2523,6 +2548,7 @@ function FramerateLimiterSetting.new(custom_mt)
 
 	self.loadState = loadState
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "mulitFramerateLimiter"
 
 	self.limit = {30, 40, 50, 60, 75, 100, 120, 144, 165, 240}
 
@@ -2616,6 +2642,7 @@ function HdrPeakBrightnessSetting.new(custom_mt)
 	self.state = Utils.getValueIndex(getBrightnessNits(), g_settingsModel.hdrPeakBrightnessValues)
 	self.loadState = gEnv.g_isDevelopmentVersion and getHdrAvailable() and getScreenHdrOutput() and AdditionalSettingsManager.LOAD_STATE.MAP_LOAD or AdditionalSettingsManager.LOAD_STATE.NO
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "sliderHdrPeakBrightness"
 
 	return self
 end
@@ -2640,6 +2667,7 @@ function HdrContrastSetting.new(custom_mt)
 	self.state = Utils.getValueIndex(getHDRGamma(), g_settingsModel.hdrContrastValues)
 	self.loadState = gEnv.g_isDevelopmentVersion and getHdrAvailable() and getScreenHdrOutput() and AdditionalSettingsManager.LOAD_STATE.MAP_LOAD or AdditionalSettingsManager.LOAD_STATE.NO
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "sliderHdrContrast"
 
 	return self
 end
@@ -2664,6 +2692,7 @@ function OverlayBrightnessSetting.new(custom_mt)
 	self.state = Utils.getValueIndex(getOverlayBrightnessNits(), g_settingsModel.overlayBrightnessValues)
 	self.loadState = gEnv.g_isDevelopmentVersion and getHdrAvailable() and getScreenHdrOutput() and AdditionalSettingsManager.LOAD_STATE.MAP_LOAD or AdditionalSettingsManager.LOAD_STATE.NO
 	self.type = AdditionalSettingsManager.TYPE.INT
+	self.elementName = "sliderOverlayBrightness"
 
 	return self
 end

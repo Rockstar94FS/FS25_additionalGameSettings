@@ -23,67 +23,21 @@ function AdditionalSettingsPage.new(subclass_mt)
 	local self = FrameElement.new(nil, subclass_mt or AdditionalSettingsPage_mt)
 
 	self.isDirty = false
-	self.checkboxMapping = {}
-	self.optionMapping = {}
-	self.buttonMapping = {}
-	self.sliderMapping = {}
+	self.elementMapping = {}
 
 	return self
 end
 
-function AdditionalSettingsPage:initialize(settingsManager)
-	local addittionalSettings = settingsManager.addittionalSettings
-
-	self.checkboxMapping[self.checkHUD] = addittionalSettings.hud
-	self.checkboxMapping[self.checkHourFormat] = addittionalSettings.hourFormat
-	self.checkboxMapping[self.checkDialogBoxes] = addittionalSettings.dialogBoxes
-	self.checkboxMapping[self.checkEasyMotorStart] = addittionalSettings.easyMotorStart
-	self.checkboxMapping[self.checkAutostart] = addittionalSettings.autostart
-	self.checkboxMapping[self.checkDoF] = addittionalSettings.dof
-	self.checkboxMapping[self.checkCameraCollisions] = addittionalSettings.cameraCollisions
-	self.checkboxMapping[self.checkGuiCamera] = addittionalSettings.guiCamera
-	self.checkboxMapping[self.checkClockBackground] = addittionalSettings.clockBackground
-	self.checkboxMapping[self.checkBlinkingWarnings] = addittionalSettings.blinkingWarnings
-	self.checkboxMapping[self.checkClockBold] = addittionalSettings.clockBold
-	self.checkboxMapping[self.checkTorch] = addittionalSettings.torch
-
-	self.optionMapping[self.multiCrosshair] = addittionalSettings.crosshair
-	self.optionMapping[self.multiDate] = addittionalSettings.date
-	self.optionMapping[self.multiClockPosition] = addittionalSettings.clockPosition
-	self.optionMapping[self.multiFadeEffect] = addittionalSettings.fadeEffect
-	self.optionMapping[self.multiVehicleCamera] = addittionalSettings.vehicleCamera
-	self.optionMapping[self.multiPlayerCamera] = addittionalSettings.playerCamera
-	self.optionMapping[self.mulitStoreItems] = addittionalSettings.storeItems
-	self.optionMapping[self.multiLighting] = addittionalSettings.lighting
-	self.optionMapping[self.mulitFramerateLimiter] = addittionalSettings.framerateLimiter
-	self.optionMapping[self.multiWalkMode] = addittionalSettings.walkMode
-	self.optionMapping[self.multiCrouchMode] = addittionalSettings.crouchMode
-	self.optionMapping[self.multiRunMode] = addittionalSettings.runMode
-
-	self.buttonMapping[self.buttonDateColor] = addittionalSettings.clockColor
-	self.buttonMapping[self.buttonHudColor] = addittionalSettings.hudColor
-
-	self.sliderMapping[self.sliderHdrPeakBrightness] = addittionalSettings.hdrPeakBrightness
-	self.sliderMapping[self.sliderHdrContrast] = addittionalSettings.hdrContrast
-	self.sliderMapping[self.sliderOverlayBrightness] = addittionalSettings.overlayBrightness
-
-	for checkboxElement, settingsKey in pairs(self.checkboxMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", checkboxElement)
+function AdditionalSettingsPage:initialize(settings)
+	for _, setting in pairs(settings) do
+		if setting.elementName ~= nil and self[setting.elementName] ~= nil then
+			self.elementMapping[self[setting.elementName]] = setting
+		end
 	end
 
-	for optionElement, settingsKey in pairs(self.optionMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", optionElement)
+	for element, settingsKey in pairs(self.elementMapping) do
+		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", element)
 	end
-
-	for buttonElement, settingsKey in pairs(self.buttonMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", buttonElement)
-	end
-
-	for sliderElement, settingsKey in pairs(self.sliderMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", sliderElement)
-	end
-
-	self.settingsManager = settingsManager
 end
 
 function AdditionalSettingsPage:onGuiSetupFinished()
@@ -119,23 +73,18 @@ function AdditionalSettingsPage:updateAlternating()
 end
 
 function AdditionalSettingsPage:updateAdditionalSettings()
-	for checkboxElement, settingsKey in pairs(self.checkboxMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", checkboxElement)
-		checkboxElement:setIsChecked(settingsKey.state, true)
-	end
+	for element, settingsKey in pairs(self.elementMapping) do
+		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", element)
 
-	for optionElement, settingsKey in pairs(self.optionMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", optionElement)
-		optionElement:setState(settingsKey.state + 1, nil, true)
-	end
+		local class = element:class()
 
-	for buttonElement, settingsKey in pairs(self.buttonMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", buttonElement)
-	end
-
-	for sliderElement, settingsKey in pairs(self.sliderMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", sliderElement)
-		sliderElement:setState(settingsKey.state, nil, true)
+		if class == BinaryOptionElement then
+			element:setIsChecked(settingsKey.state, true)
+		elseif class == MultiTextOptionElement then
+			element:setState(settingsKey.state + 1, nil, true)
+		elseif class == OptionSliderElement then
+			element:setState(settingsKey.state, nil, true)
+		end
 	end
 end
 
@@ -146,7 +95,7 @@ end
 
 function AdditionalSettingsPage:onFrameClose()
 	if self.isDirty then
-		self.settingsManager:saveSettingsToXMLFile()
+		g_additionalSettingsManager:saveSettingsToXMLFile()
 		self.isDirty = false
 	end
 end
@@ -157,47 +106,47 @@ end
 
 function AdditionalSettingsPage:onClickCheckbox(state, checkboxElement)
 	local originalTarget = g_additionalSettingsManager.settingsPage
-	local checkboxMapping = originalTarget.checkboxMapping[checkboxElement]
+	local setting = originalTarget.elementMapping[checkboxElement]
 
-	if checkboxMapping ~= nil then
+	if setting ~= nil then
 		local newState = state == CheckedOptionElement.STATE_CHECKED
 
-		checkboxMapping.state = newState
-		AdditionalSettingsUtil.callFunction(checkboxMapping, "onStateChange", newState, checkboxElement, false)
+		setting.state = newState
+		AdditionalSettingsUtil.callFunction(setting, "onStateChange", newState, checkboxElement, false)
 		originalTarget.isDirty = true
 	end
 end
 
 function AdditionalSettingsPage:onClickMultiOption(state, optionElement)
 	local originalTarget = g_additionalSettingsManager.settingsPage
-	local optionMapping = originalTarget.optionMapping[optionElement]
+	local setting = originalTarget.elementMapping[optionElement]
 
-	if optionMapping ~= nil then
+	if setting ~= nil then
 		local newState = state - 1
 
-		optionMapping.state = newState
-		AdditionalSettingsUtil.callFunction(optionMapping, "onStateChange", newState, optionElement, false)
+		setting.state = newState
+		AdditionalSettingsUtil.callFunction(setting, "onStateChange", newState, optionElement, false)
 		originalTarget.isDirty = true
 	end
 end
 
 function AdditionalSettingsPage:onClickButton(buttonElement)
 	local originalTarget = g_additionalSettingsManager.settingsPage
-	local buttonMapping = originalTarget.buttonMapping[buttonElement]
+	local setting = originalTarget.elementMapping[buttonElement]
 
-	if buttonMapping ~= nil then
-		AdditionalSettingsUtil.callFunction(buttonMapping, "onClickButton", buttonElement)
+	if setting ~= nil then
+		AdditionalSettingsUtil.callFunction(setting, "onClickButton", buttonElement)
 		originalTarget.isDirty = true
 	end
 end
 
 function AdditionalSettingsPage:onClickSlider(value, sliderElement)
 	local originalTarget = g_additionalSettingsManager.settingsPage
-	local sliderMapping = originalTarget.sliderMapping[sliderElement]
+	local setting = originalTarget.elementMapping[sliderElement]
 
-	if sliderMapping ~= nil then
-		sliderMapping.state = value
-		AdditionalSettingsUtil.callFunction(sliderMapping, "onStateChange", value, sliderElement, false)
+	if setting ~= nil then
+		setting.state = value
+		AdditionalSettingsUtil.callFunction(setting, "onStateChange", value, sliderElement, false)
 		originalTarget.isDirty = true
 	end
 end

@@ -62,6 +62,13 @@ function AdditionalSettingsManager.new(modDir, settingsDir, modEnv, args, custom
 	self.modVersion = g_modManager:getModByName(modEnv).version
 	self.resetAllowed = false
 
+	self.xmlFuncs = {
+		[AdditionalSettingsManager.TYPE.BOOL] = {"setBool", "getBool"},
+		[AdditionalSettingsManager.TYPE.INT] = {"setInt", "getInt"},
+		[AdditionalSettingsManager.TYPE.FLOAT] = {"setFloat", "getFloat"},
+		[AdditionalSettingsManager.TYPE.STRING] = {"setString", "getString"},
+	}
+
 	self:addModEnvironmentTexts()
 	self.addittionalSettings = self:loadAdditionalSettings()
 
@@ -144,9 +151,7 @@ function AdditionalSettingsManager:loadMap(filename)
 	self.settingStates = self:loadSettingsFromXMLFile()
 	self:applySettingStates(AdditionalSettingsManager.LOAD_STATE.MAP_LOAD)
 
-	if self.settingsPage ~= nil then
-		self.settingsPage:initialize(self)
-	end
+	self.settingsPage:initialize(self.addittionalSettings)
 end
 
 function AdditionalSettingsManager:onLoadMapFinished()
@@ -200,35 +205,25 @@ function AdditionalSettingsManager:getSettingStateByName(name)
 end
 
 function AdditionalSettingsManager:getUIElement(setting)
-	if self.settingsPage ~= nil then
-		for checkbox, key in pairs(self.settingsPage.checkboxMapping) do
-			if key == setting then
-				return checkbox
-			end
-		end
-
-		for option, key in pairs(self.settingsPage.optionMapping) do
-			if key == setting then
-				return option
-			end
-		end
-
-		for button, key in pairs(self.settingsPage.buttonMapping) do
-			if key == setting then
-				return button
-			end
-		end
-
-		for slider, key in pairs(self.settingsPage.sliderMapping) do
-			if key == setting then
-				return slider
-			end
-		end
+	if setting.elementName ~= nil then
+		return self.settingsPage[setting.elementName]
 	end
 end
 
 function AdditionalSettingsManager:saveToXMLFile(missionInfo)
 	self:saveSettingsToXMLFile()
+end
+
+function AdditionalSettingsManager:saveSettingToXMLFile(xmlFile, key, state, type)
+	local funcName = self.xmlFuncs[type][1]
+
+	xmlFile[funcName](xmlFile, key, state)
+end
+
+function AdditionalSettingsManager:loadSettingFromXMLFile(xmlFile, key, type)
+	local funcName = self.xmlFuncs[type][2]
+
+	return xmlFile[funcName](xmlFile, key)
 end
 
 function AdditionalSettingsManager:saveSettingsToXMLFile()
@@ -243,15 +238,7 @@ function AdditionalSettingsManager:saveSettingsToXMLFile()
 				local customState = AdditionalSettingsUtil.callFunction(setting, "onSaveSetting", xmlFile, key)
 
 				if not customState and setting.state ~= nil then
-					if setting.type == AdditionalSettingsManager.TYPE.BOOL then
-						xmlFile:setBool(key, setting.state)
-					elseif setting.type == AdditionalSettingsManager.TYPE.INT then
-						xmlFile:setInt(key, setting.state)
-					elseif setting.type == AdditionalSettingsManager.TYPE.FLOAT then
-						xmlFile:setFloat(key, setting.state)
-					elseif setting.type == AdditionalSettingsManager.TYPE.STRING then
-						xmlFile:setString(key, setting.state)
-					end
+					self:saveSettingToXMLFile(xmlFile, key, setting.state, setting.type)
 				end
 			end
 		end
@@ -275,15 +262,7 @@ function AdditionalSettingsManager:loadSettingsFromXMLFile()
 				local customState, savedState = AdditionalSettingsUtil.callFunction(setting, "onLoadSetting", xmlFile, key)
 
 				if not customState and setting.state ~= nil then
-					if setting.type == AdditionalSettingsManager.TYPE.BOOL then
-						savedState = xmlFile:getBool(key)
-					elseif setting.type == AdditionalSettingsManager.TYPE.INT then
-						savedState = xmlFile:getInt(key)
-					elseif setting.type == AdditionalSettingsManager.TYPE.FLOAT then
-						savedState = xmlFile:getFloat(key)
-					elseif setting.type == AdditionalSettingsManager.TYPE.STRING then
-						savedState = xmlFile:getString(key)
-					end
+					savedState = self:loadSettingFromXMLFile(xmlFile, key, setting.type)
 				end
 
 				settingStates[id] = savedState
