@@ -72,7 +72,7 @@
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_autostart"/>
 				</Bitmap>
 				<Bitmap profile="fs25_multiTextOptionContainer">
-					<MultiTextOption profile="fs25_settingsMultiTextOption" onClick="onClickMultiOption" id="mulitStoreItems" texts="$l10n_ags_ui_allItems|$l10n_ags_ui_basicItems|$l10n_ui_modsAndDlcs|$l10n_button_modHub|$l10n_modHub_dlc">
+					<MultiTextOption profile="fs25_settingsMultiTextOption" onClick="onClickMultiOption" id="multiStoreItems" texts="$l10n_ags_ui_allItems|$l10n_ags_ui_basicItems|$l10n_ui_modsAndDlcs|$l10n_button_modHub|$l10n_modHub_dlc">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" text="$l10n_ags_toolTip_storeItems"/>
 					</MultiTextOption>
 					<Text profile="fs25_settingsMultiTextOptionTitle" text="$l10n_ags_storeItems"/>

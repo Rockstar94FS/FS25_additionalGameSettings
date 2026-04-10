@@ -30,13 +30,12 @@ end
 
 function AdditionalSettingsPage:initialize(settings)
 	for _, setting in pairs(settings) do
-		if setting.elementName ~= nil and self[setting.elementName] ~= nil then
-			self.elementMapping[self[setting.elementName]] = setting
-		end
-	end
+		local element = setting.elementName and self[setting.elementName]
 
-	for element, settingsKey in pairs(self.elementMapping) do
-		AdditionalSettingsUtil.callFunction(settingsKey, "onCreateElement", element)
+		if element then
+			self.elementMapping[element] = setting
+			AdditionalSettingsUtil.callFunction(setting, "onCreateElement", element)
+		end
 	end
 end
 
@@ -45,14 +44,12 @@ function AdditionalSettingsPage:onGuiSetupFinished()
 
 	local oldDisableFunc = self.checkHUD.setDisabled
 
-	local function elementDisableFunc(element, disabled)
-		oldDisableFunc(element, disabled)
-		element.parent:getDescendantByName("iconDisabled"):setDisabled(not disabled)
-	end
-
 	for _, container in pairs(self.additionalSettingsLayout.elements) do
 		if container:getDescendantByName("iconDisabled") ~= nil then
-			container.elements[1].setDisabled = elementDisableFunc
+			function container.setDisabled(container, disabled)
+				oldDisableFunc(container, disabled)
+				container:getDescendantByName("iconDisabled"):setDisabled(not disabled)
+			end
 		end
 	end
 end
@@ -63,7 +60,7 @@ function AdditionalSettingsPage:updateAlternating()
 	for _, container in pairs(self.additionalSettingsLayout.elements) do
 		if container.name == "sectionHeader" then
 			isAlternate = true
-		elseif container:getIsVisibleNonRec() then
+		elseif container.visible then
 			container:setImageColor(nil, unpack(InGameMenuSettingsFrame.COLOR_ALTERNATING[isAlternate]))
 			isAlternate = not isAlternate
 		end

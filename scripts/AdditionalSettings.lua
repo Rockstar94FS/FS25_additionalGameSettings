@@ -28,14 +28,14 @@ function HUDSetting:onStateChange(state, checkboxElement, loadFromSavegame)
 		local target = checkboxElement.target
 		local disabled = not state or g_additionalSettingsManager:getSettingStateByName("date") == 0
 
-		target.multiCrosshair:setDisabled(not state)
-		target.multiDate:setDisabled(not state)
-		target.checkHourFormat:setDisabled(not state)
-		target.buttonHudColor:setDisabled(not state)
-		target.multiClockPosition:setDisabled(disabled)
-		target.checkClockBackground:setDisabled(disabled)
-		target.buttonDateColor:setDisabled(disabled)
-		target.checkClockBold:setDisabled(disabled)
+		target.multiCrosshair.parent:setDisabled(not state)
+		target.multiDate.parent:setDisabled(not state)
+		target.checkHourFormat.parent:setDisabled(not state)
+		target.buttonHudColor.parent:setDisabled(not state)
+		target.multiClockPosition.parent:setDisabled(disabled)
+		target.checkClockBackground.parent:setDisabled(disabled)
+		target.buttonDateColor.parent:setDisabled(disabled)
+		target.checkClockBold.parent:setDisabled(disabled)
 	end
 end
 
@@ -132,7 +132,7 @@ function CrosshairSetting:overwriteInteract(crosshair, func)
 end
 
 function CrosshairSetting:onTabOpen(optionElement)
-	optionElement:setDisabled(not g_currentMission.hud:getIsVisible())
+	optionElement.parent:setDisabled(not g_currentMission.hud:getIsVisible())
 end
 
 
@@ -250,10 +250,10 @@ function DateSetting:onStateChange(state, optionElement, loadFromSavegame)
 		local target = optionElement.target
 		local disabled = not g_currentMission.hud:getIsVisible() or state == 0
 
-		target.multiClockPosition:setDisabled(disabled)
-		target.checkClockBackground:setDisabled(disabled)
-		target.buttonDateColor:setDisabled(disabled)
-		target.checkClockBold:setDisabled(disabled)
+		target.multiClockPosition.parent:setDisabled(disabled)
+		target.checkClockBackground.parent:setDisabled(disabled)
+		target.buttonDateColor.parent:setDisabled(disabled)
+		target.checkClockBold.parent:setDisabled(disabled)
 	end
 end
 
@@ -273,7 +273,7 @@ function DateSetting:onCreateElement(optionElement)
 end
 
 function DateSetting:onTabOpen(optionElement)
-	optionElement:setDisabled(not g_currentMission.hud:getIsVisible())
+	optionElement.parent:setDisabled(not g_currentMission.hud:getIsVisible())
 end
 
 function DateSetting:onUIScaleChanged(uiScale)
@@ -533,7 +533,7 @@ function ClockPositionSetting.new(custom_mt)
 end
 
 function ClockPositionSetting:onTabOpen(optionElement)
-	optionElement:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
+	optionElement.parent:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
 end
 
 
@@ -559,7 +559,7 @@ function HourFormatSetting:onLoad(filename)
 end
 
 function HourFormatSetting:onTabOpen(checkboxElement)
-	checkboxElement:setDisabled(not g_currentMission.hud:getIsVisible())
+	checkboxElement.parent:setDisabled(not g_currentMission.hud:getIsVisible())
 end
 
 function HourFormatSetting:onStateChange(state, checkboxElement, loadFromSavegame)
@@ -946,7 +946,7 @@ function EasyMotorStartSetting.new(custom_mt)
 end
 
 function EasyMotorStartSetting:onTabOpen(checkboxElement)
-	checkboxElement:setDisabled(g_currentMission.missionInfo.automaticMotorStartEnabled)
+	checkboxElement.parent:setDisabled(g_currentMission.missionInfo.automaticMotorStartEnabled)
 end
 
 function EasyMotorStartSetting:actionEventAccelerate(drivable, superFunc, actionName, inputValue, callbackState, isAnalog)
@@ -994,7 +994,7 @@ function AutostartSetting.new(custom_mt)
 end
 
 function AutostartSetting:onTabOpen(checkboxElement)
-	checkboxElement:setDisabled(self.isParamSet)
+	checkboxElement.parent:setDisabled(self.isParamSet)
 end
 
 function AutostartSetting:onStateChange(state, checkboxElement, loadFromSavegame)
@@ -1014,7 +1014,7 @@ function StoreItemsSetting.new(custom_mt)
 	self.state = 0
 	self.loadState = AdditionalSettingsManager.LOAD_STATE.MISSION_START
 	self.type = AdditionalSettingsManager.TYPE.INT
-	self.elementName = "mulitStoreItems"
+	self.elementName = "multiStoreItems"
 
 	return self
 end
@@ -1777,7 +1777,7 @@ function ClockColorSetting:loadColors()
 end
 
 function ClockColorSetting:onTabOpen(buttonElement)
-	buttonElement:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
+	buttonElement.parent:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
 end
 
 function ClockColorSetting:onStateChange(state, buttonElement, loadFromSavegame)
@@ -1890,7 +1890,7 @@ function ClockBackgroundSetting.new(custom_mt)
 end
 
 function ClockBackgroundSetting:onTabOpen(checkboxElement)
-	checkboxElement:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
+	checkboxElement.parent:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
 end
 
 
@@ -1934,7 +1934,7 @@ function ClockBoldSetting.new(custom_mt)
 end
 
 function ClockBoldSetting:onTabOpen(checkboxElement)
-	checkboxElement:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
+	checkboxElement.parent:setDisabled(not g_currentMission.hud:getIsVisible() or g_additionalSettingsManager:getSettingStateByName("date") == 0)
 end
 
 
@@ -2051,7 +2051,7 @@ function HudColorSetting:loadColors()
 end
 
 function HudColorSetting:onTabOpen(buttonElement)
-	buttonElement:setDisabled(not g_currentMission.hud:getIsVisible())
+	buttonElement.parent:setDisabled(not g_currentMission.hud:getIsVisible())
 end
 
 function HudColorSetting:onStateChange(state, buttonElement, loadFromSavegame)
@@ -2436,7 +2436,7 @@ function WalkModeSetting:onStateChange(state, optionElement, loadFromSavegame)
 	if optionElement ~= nil then
 		local target = optionElement.target
 
-		target.multiRunMode:setDisabled(state == 0)
+		target.multiRunMode.parent:setDisabled(state == 0)
 	end
 end
 
@@ -2506,7 +2506,7 @@ function RunModeSettings.new(custom_mt)
 end
 
 function RunModeSettings:onTabOpen(optionElement)
-	optionElement:setDisabled(g_additionalSettingsManager:getSettingStateByName("walkMode") == 0)
+	optionElement.parent:setDisabled(g_additionalSettingsManager:getSettingStateByName("walkMode") == 0)
 end
 
 function RunModeSettings:onCreateElement(optionElement)
