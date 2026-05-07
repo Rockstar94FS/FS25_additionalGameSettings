@@ -74,13 +74,14 @@ function AdditionalSettingsPage:updateAdditionalSettings()
 		AdditionalSettingsUtil.callFunction(settingsKey, "onTabOpen", element)
 
 		local class = element:class()
+		local state = settingsKey.state
 
 		if class == BinaryOptionElement then
-			element:setIsChecked(settingsKey.state, true)
+			element:setIsChecked(state, true)
 		elseif class == MultiTextOptionElement then
-			element:setState(settingsKey.state + 1, nil, true)
+			element:setState(state + 1, nil, true)
 		elseif class == OptionSliderElement then
-			element:setState(settingsKey.state, nil, true)
+			element:setState(state, nil, true)
 		end
 	end
 end

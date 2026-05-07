@@ -112,6 +112,10 @@ function CrosshairSetting:onUpdateSprayCan(handToolSprayCan, ...)
 end
 
 function CrosshairSetting:overwriteDefault(crosshair, func)
+	if crosshair == nil or crosshair.render == nil then
+		return
+	end
+
 	local render = crosshair.render
 
 	crosshair.render = function(...)
@@ -122,6 +126,10 @@ function CrosshairSetting:overwriteDefault(crosshair, func)
 end
 
 function CrosshairSetting:overwriteInteract(crosshair, func)
+	if crosshair == nil or crosshair.render == nil then
+		return
+	end
+
 	local render = crosshair.render
 
 	crosshair.render = function(...)
@@ -555,7 +563,9 @@ function HourFormatSetting.new(custom_mt)
 end
 
 function HourFormatSetting:onLoad(filename)
-	AdditionalSettingsUtil.overwrittenFunction(g_currentMission.hud.gameInfoDisplay, "draw", self, "draw")
+	AdditionalSettingsUtil.overwrittenFunction(g_currentMission.hud.gameInfoDisplay, "draw", self, "formatTime")
+	AdditionalSettingsUtil.overwrittenFunction(gEnv.g_i18n, "formatCurrentTime", self, "formatTime")
+	AdditionalSettingsUtil.overwrittenFunction(SleepDialog, "updateOptions", self, "formatTime")
 end
 
 function HourFormatSetting:onTabOpen(checkboxElement)
@@ -568,7 +578,7 @@ function HourFormatSetting:onStateChange(state, checkboxElement, loadFromSavegam
 	dateSettings:updateCurrentDateFormat(dateSettings.state, state)
 end
 
-function HourFormatSetting:draw(gameInfoDisplay, superFunc)
+function HourFormatSetting:formatTime(target, superFunc)
 	local format = string.format
 
 	string.format = function (form, ...)
@@ -597,10 +607,11 @@ function HourFormatSetting:draw(gameInfoDisplay, superFunc)
 				end
 			end
 		end
+
 		return format(form, ...)
 	end
 
-	local retValue = superFunc(gameInfoDisplay)
+	local retValue = superFunc(target)
 
 	string.format = format
 
