@@ -727,21 +727,22 @@ function DialogBoxesSetting.new(custom_mt)
 	AdditionalSettingsUtil.prependedFunction(InfoDialog, "setText", self, "setText")
 
 	self.infoTexts = {
-		"shop_messageBoughtAnimals",
-		"shop_messageBoughtChainsaw",
-		"shop_messageBoughtHandToolInventory",
-		"shop_messageBoughtHandToolPickedUp",
-		"shop_messageBoughtPlaceable",
-		"shop_messageConfigurationChanged",
-		"shop_messageGardenCenterPurchaseReady",
-		"shop_messageLeasingReady",
-		"shop_messagePurchaseReady",
-		"shop_messageReturnedVehicle",
-		"shop_messageSoldAnimals",
-		"shop_messageSoldObject",
-		"shop_messageSoldVehicle",
-		"shop_messageThanksForBuying",
-		"ui_vehicleResetDone"
+		{text = "shop_messageBoughtAnimals"},
+		{text = "shop_messageBoughtChainsaw"},
+		{text = "shop_messageBoughtHandToolInventory"},
+		{text = "shop_messageBoughtHandToolPickedUp"},
+		{text = "shop_messageBoughtPlaceable"},
+		{text = "shop_messageConfigurationChanged"},
+		{text = "shop_messageGardenCenterPurchaseReady"},
+		{text = "shop_messageLeasingReady"},
+		{text = "shop_messagePurchaseReady"},
+		{text = "shop_messageReturnedVehicle"},
+		{text = "shop_messageSoldAnimals"},
+		{text = "shop_messageSoldObject"},
+		{text = "shop_messageSoldVehicle"},
+		{text = "shop_messageThanksForBuying"},
+		{text = "ui_vehicleResetDone"},
+		{text = "dialog_getFullVersion", noCallback = true}
 	}
 
 	self.dialogInstance = nil
@@ -767,8 +768,13 @@ end
 
 function DialogBoxesSetting:setText(infoDialog, text)
 	if not self.state then
-		for _, str in pairs(self.infoTexts) do
-			if text == g_i18n:getText(str) then
+		for _, infoText in pairs(self.infoTexts) do
+			if text == g_i18n:getText(infoText.text) then
+				if infoText.noCallback then
+					infoDialog.onOk = nil
+					AdditionalSettingsUtil.info("Blocked info dialog callback: %s", infoText.text)
+				end
+
 				self.dialogInstance = infoDialog
 				break
 			end
