@@ -112,7 +112,8 @@ function AdditionalSettingsManager:loadAdditionalSettings()
 		debug = DebugSettings.new(),
 		hdrPeakBrightness = HdrPeakBrightnessSetting.new(),
 		hdrContrast = HdrContrastSetting.new(),
-		overlayBrightness = OverlayBrightnessSetting.new()
+		overlayBrightness = OverlayBrightnessSetting.new(),
+		dischargeNotification = DischargeNotificationSetting.new()
 	}
 end
 

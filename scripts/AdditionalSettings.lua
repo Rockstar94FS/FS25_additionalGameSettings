@@ -2722,3 +2722,87 @@ end
 function OverlayBrightnessSetting:onStateChange(value, sliderElement, loadFromSavegame)
 	setOverlayBrightnessNits(g_settingsModel.overlayBrightnessValues[value])
 end
+
+
+DischargeNotificationSetting = {}
+
+local DischargeNotificationSetting_mt = Class(DischargeNotificationSetting)
+
+function DischargeNotificationSetting.new(custom_mt)
+	local self = setmetatable({}, custom_mt or DischargeNotificationSetting_mt)
+
+	self.loadState = AdditionalSettingsManager.LOAD_STATE.NO
+
+	AdditionalSettingsUtil.appendedFunction(Dischargeable, "onLoad", self, "dischargeableOnLoad")
+	AdditionalSettingsUtil.appendedFunction(Dischargeable, "onDelete", self, "dischargeableOnDelete")
+	AdditionalSettingsUtil.appendedFunction(Dischargeable, "onUpdate", self, "dischargeableOnUpdate")
+
+	return self
+end
+
+function DischargeNotificationSetting:dischargeableOnLoad(target, savegame)
+	local spec = target.spec_dischargeable
+
+	spec.sideNotificationProgressBar = g_currentMission.hud:addSideNotificationProgressBar("", "", "")
+	spec.sideNotificationTime = 0
+	spec.sideNotificationDuration = 2500
+end
+
+function DischargeNotificationSetting:dischargeableOnDelete(target)
+	local spec = target.spec_dischargeable
+
+	g_currentMission.hud:removeSideNotificationProgressBar(spec.sideNotificationProgressBar)
+end
+
+function DischargeNotificationSetting:dischargeableOnUpdate(target, dt, isActiveForInput, isActiveForInputIgnoreSelection, isSelected)
+	if target.isClient then
+		local spec = target.spec_dischargeable
+
+		if target:getDischargeState() == Dischargeable.DISCHARGE_STATE_OBJECT then
+			local dischargeNode = target:getCurrentDischargeNode()
+
+			if dischargeNode ~= nil then
+				local object, fillUnitIndex = target:getDischargeTargetObject(dischargeNode)
+
+				if object ~= nil and object:isa(Vehicle) then
+					spec.sideNotificationData = {object = object, fillUnitIndex = fillUnitIndex}
+					spec.sideNotificationTime = spec.sideNotificationDuration
+				end
+			end
+		end
+
+		if spec.sideNotificationTime > 0 then
+			spec.sideNotificationTime = math.max(spec.sideNotificationTime - dt, 0)
+
+			if isActiveForInputIgnoreSelection and spec.sideNotificationData ~= nil and not (target.spec_pipe ~= nil and target.spec_pipe.sideNotificationTime > 0) then
+				local object = spec.sideNotificationData.object
+				local fillUnitIndex = spec.sideNotificationData.fillUnitIndex
+
+				if object ~= nil and not (object.isDeleted or object.isDeleting) then
+					local fillType = object:getFillUnitFillType(fillUnitIndex)
+
+					if fillType ~= FillType.UNKNOWN then
+						local fillLevel = object:getFillUnitFillLevel(fillUnitIndex)
+						local capacity = object:getFillUnitCapacity(fillUnitIndex)
+
+						if capacity ~= nil and capacity > 0 then
+							local fillLevelPct = fillLevel / capacity
+							local fillTypeDesc = g_fillTypeManager:getFillTypeByIndex(fillType)
+							local text = string.format("%d%s %s", fillLevel, fillTypeDesc.unitShort or "", fillTypeDesc.title)
+
+							local progressBar = spec.sideNotificationProgressBar
+
+							progressBar.title = object:getFullName()
+							progressBar.text = text
+							progressBar.progress = fillLevelPct
+
+							g_currentMission.hud:markSideNotificationProgressBarForDrawing(progressBar)
+						end
+					end
+				end
+			end
+		else
+			spec.sideNotificationData = nil
+		end
+	end
+end
