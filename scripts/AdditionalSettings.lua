@@ -2774,11 +2774,23 @@ function DischargeNotificationSetting:dischargeableOnUpdate(target, dt, isActive
 		if spec.sideNotificationTime > 0 then
 			spec.sideNotificationTime = math.max(spec.sideNotificationTime - dt, 0)
 
-			if isActiveForInputIgnoreSelection and spec.sideNotificationData ~= nil and not (target.spec_pipe ~= nil and target.spec_pipe.sideNotificationTime > 0) then
+			if isActiveForInputIgnoreSelection and spec.sideNotificationData ~= nil then
 				local object = spec.sideNotificationData.object
 				local fillUnitIndex = spec.sideNotificationData.fillUnitIndex
 
-				if object ~= nil and not (object.isDeleted or object.isDeleting) then
+				local spec_pipe = target.spec_pipe
+				local isPipeNotificationVisible = false
+
+				if spec_pipe ~= nil and spec_pipe.sideNotificationData ~= nil and spec_pipe.sideNotificationTime > 0 then
+					local pipeObject = spec_pipe.sideNotificationData.objectId ~= nil and NetworkUtil.getObject(spec_pipe.sideNotificationData.objectId)
+					local pipeFillUnitIndex = spec_pipe.sideNotificationData.fillUnitIndex
+
+					if pipeObject ~= nil and pipeFillUnitIndex ~= nil then
+						isPipeNotificationVisible = pipeObject == object and pipeFillUnitIndex == fillUnitIndex
+					end
+				end
+
+				if object ~= nil and not (object.isDeleted or object.isDeleting) and not isPipeNotificationVisible then
 					local fillType = object:getFillUnitFillType(fillUnitIndex)
 
 					if fillType ~= FillType.UNKNOWN then
