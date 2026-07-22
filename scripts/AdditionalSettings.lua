@@ -724,7 +724,7 @@ function DialogBoxesSetting.new(custom_mt)
 	self.elementName = "checkDialogBoxes"
 
 	AdditionalSettingsUtil.registerEventListener("onUpdate", self)
-	AdditionalSettingsUtil.prependedFunction(InfoDialog, "setText", self, "setText")
+	AdditionalSettingsUtil.overwrittenFunction(InfoDialog, "show", self, "show", true)
 
 	self.infoTexts = {
 		{text = "shop_messageBoughtAnimals"},
@@ -745,41 +745,54 @@ function DialogBoxesSetting.new(custom_mt)
 		{text = "dialog_getFullVersion", noCallback = true}
 	}
 
-	self.dialogInstance = nil
+	self.dialogToCloseText = nil
 
 	return self
 end
 
 function DialogBoxesSetting:onUpdate(dt)
-	if g_currentMission:getIsClient() and not self.state and self.dialogInstance ~= nil then
-		self.dialogInstance:close()
+	if g_currentMission:getIsClient() and not self.state then
+		if self.dialogToCloseText ~= nil then
+			local dialog = InfoDialog.INSTANCE
 
-		if self.dialogInstance.onOk ~= nil then
-			if self.dialogInstance.target ~= nil then
-				self.dialogInstance.onOk(self.dialogInstance.target, self.dialogInstance.args)
-			else
-				self.dialogInstance.onOk(self.dialogInstance.args)
+			if dialog.isOpen and dialog.infoText == self.dialogToCloseText then
+				dialog:close()
+
+				if dialog.onOk ~= nil then
+					if dialog.target == nil then
+						dialog.onOk(dialog.args)
+					else
+						dialog.onOk(dialog.target, dialog.args)
+					end
+
+					dialog.onOk = nil
+					dialog.target = nil
+					dialog.args = nil
+				end
+
+				self.dialogToCloseText = nil
 			end
 		end
-
-		self.dialogInstance = nil
 	end
 end
 
-function DialogBoxesSetting:setText(infoDialog, text)
+function DialogBoxesSetting:show(superFunc, text, callback, target, dialogType, okText, buttonAction, callbackArgs, disableOpenSound)
 	if not self.state then
 		for _, infoText in pairs(self.infoTexts) do
 			if text == g_i18n:getText(infoText.text) then
 				if infoText.noCallback then
-					infoDialog.onOk = nil
 					AdditionalSettingsUtil.info("Blocked info dialog callback: %s", infoText.text)
+					return
+				else
+					disableOpenSound = true
+					self.dialogToCloseText = text
+					break
 				end
-
-				self.dialogInstance = infoDialog
-				break
 			end
 		end
 	end
+
+	superFunc(text, callback, target, dialogType, okText, buttonAction, callbackArgs, disableOpenSound)
 end
 
 
